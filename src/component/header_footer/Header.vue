@@ -4,6 +4,9 @@ const route = useRouter();
 const goToLogin = () => {
     route.push('/login');
 }
+const goToRegister = () => {
+    route.push('/register');
+}
 </script>
 
 <template>
@@ -28,7 +31,7 @@ const goToLogin = () => {
             <div class="flex items-center space-x-4">
                 <button @click="goToLogin"
                     class="px-4 py-2 text-neutral-600 hover:text-neutral-900 cursor-pointer">Masuk</button>
-                <button
+                <button @click="goToRegister"
                     class="px-6 py-2 bg-neutral-900 text-white rounded-lg hover:bg-neutral-600 cursor-pointer">Daftar</button>
             </div>
         </div>

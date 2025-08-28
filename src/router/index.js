@@ -4,6 +4,7 @@ import FiturFiturUnggulan from "@/component/fitur_fitur_unggulan/FiturFiturUnggu
 import PanduanAplikasi from "@/component/panduan_aplikasi/PanduanAplikasi.vue";
 import Kontak from "@/component/kontak/Kontak.vue";
 import Login from "@/component/login/Login.vue";
+import Register from "@/component/register/Register.vue";
 
 //  create variabel routers
 const routes = [
@@ -32,6 +33,12 @@ const routes = [
     path: "/login",
     name: "login",
     component: Login,
+  },
+  // register
+  {
+    path: "/register",
+    name: "register",
+    component: Register,
   },
 ];
 

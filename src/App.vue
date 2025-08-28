@@ -10,6 +10,12 @@ import Footer from './component/header_footer/Footer.vue';
       <router-view />
     </div>
   </div>
+  <div v-else-if="$route.path === '/register'">
+    <div>
+      <!-- content -->
+      <router-view />
+    </div>
+  </div>
   <div v-else>
     <header id="header" class="bg-white border-b border-neutral-200 sticky top-0 z-50">
       <!-- header -->

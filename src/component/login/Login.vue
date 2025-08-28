@@ -1,4 +1,10 @@
-<script setup></script>
+<script setup>
+import { useRouter } from 'vue-router';
+const route = useRouter();
+const goToRegister = () => {
+    route.push('/register');
+}
+</script>
 <template>
     <div class="bg-neutral-50 min-h-[800px] flex items-center justify-center py-12">
         <div class="max-w-md w-full mx-4">
@@ -60,7 +66,8 @@
             <div class="text-center mt-6">
                 <p class="text-neutral-600">
                     Belum punya akun?
-                    <span class="text-neutral-900 hover:underline cursor-pointer">Daftar Sekarang</span>
+                    <span @click="goToRegister" class="text-neutral-900 hover:underline cursor-pointer">Daftar
+                        Sekarang</span>
                 </p>
             </div>
         </div>
