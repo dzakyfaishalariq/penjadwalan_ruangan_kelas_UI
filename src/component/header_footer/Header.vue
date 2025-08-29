@@ -14,7 +14,8 @@ const goToRegister = () => {
         <div class="flex justify-between items-center h-16">
             <div class="flex items-center">
                 <div class="w-8 h-8 bg-neutral-800 rounded-lg flex items-center justify-center">
-                    <i class="fa-solid fa-door-open text-white text-lg"></i>
+                    <!-- <i class="fa-solid fa-door-open text-white text-lg"></i> -->
+                    <font-awesome-icon icon="fa-solid fa-door-open" class="text-white text-lg" />
                 </div>
                 <span class="ml-3 text-xl text-neutral-900">RoomScheduler</span>
             </div>

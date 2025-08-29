@@ -5,6 +5,7 @@ import PanduanAplikasi from "@/component/panduan_aplikasi/PanduanAplikasi.vue";
 import Kontak from "@/component/kontak/Kontak.vue";
 import Login from "@/component/login/Login.vue";
 import Register from "@/component/register/Register.vue";
+import DashboardBerandaUser from "@/component/dashbord_branda_user/DashboardBerandaUser.vue";
 
 //  create variabel routers
 const routes = [
@@ -39,6 +40,12 @@ const routes = [
     path: "/register",
     name: "register",
     component: Register,
+  },
+  // Dashbord area
+  {
+    path: "/dashboard/branda",
+    name: "dashboard",
+    component: DashboardBerandaUser,
   },
 ];
 

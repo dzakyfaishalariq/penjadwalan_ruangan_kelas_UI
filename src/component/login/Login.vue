@@ -4,6 +4,9 @@ const route = useRouter();
 const goToRegister = () => {
     route.push('/register');
 }
+const goToDashboardBranda = () => {
+    route.push('/dashboard/branda');
+}
 </script>
 <template>
     <div class="bg-neutral-50 min-h-[800px] flex items-center justify-center py-12">
@@ -56,7 +59,7 @@ const goToRegister = () => {
                             sandi?</span>
                     </div>
 
-                    <button type="submit"
+                    <button type="submit" @click="goToDashboardBranda"
                         class="w-full bg-neutral-900 text-white py-2.5 rounded-lg hover:bg-neutral-800 transition-colors">
                         Masuk
                     </button>

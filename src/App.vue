@@ -1,6 +1,8 @@
 <script setup>
 import Header from './component/header_footer/Header.vue';
 import Footer from './component/header_footer/Footer.vue';
+import HeaderDshboard from './component/navbar_dashbord/HeaderDshboard.vue';
+import NavbarDashboard from './component/navbar_dashbord/NavbarDashboard.vue';
 </script>
 
 <template>
@@ -14,6 +16,18 @@ import Footer from './component/header_footer/Footer.vue';
     <div>
       <!-- content -->
       <router-view />
+    </div>
+  </div>
+  <div v-else-if="$route.path.includes('/dashboard')">
+    <div class="flex h-[800px]">
+      <NavbarDashboard />
+      <div class="flex-1 bg-neutral-50 p-8">
+        <HeaderDshboard />
+        <div>
+          <!-- content -->
+          <router-view />
+        </div>
+      </div>
     </div>
   </div>
   <div v-else>
