@@ -6,7 +6,8 @@
             <div class="grid lg:grid-cols-2 gap-12 items-center">
                 <div class="space-y-6">
                     <div class="w-16 h-16 bg-neutral-100 rounded-2xl flex items-center justify-center">
-                        <i class="fa-solid fa-hourglass-half text-neutral-700 text-2xl"></i>
+                        <!-- <i class="fa-solid fa-hourglass-half text-neutral-700 text-2xl"></i> -->
+                        <font-awesome-icon icon="fa-solid fa-hourglass-half" class="text-neutral-700 text-2xl" />
                     </div>
                     <h2 class="text-3xl text-neutral-900">Sistem Prioritas Otomatis</h2>
                     <p class="text-lg text-neutral-600">
@@ -15,14 +16,16 @@
                     </p>
                     <div class="space-y-4">
                         <div class="flex items-start space-x-3">
-                            <i class="fa-solid fa-clock text-neutral-500 mt-1"></i>
+                            <!-- <i class="fa-solid fa-clock text-neutral-500 mt-1"></i> -->
+                            <font-awesome-icon icon="fa-solid fa-clock" class="text-neutral-500 mt-1" />
                             <div>
                                 <h4 class="text-neutral-900 mb-1">Waktu Prioritas Mahasiswa</h4>
                                 <p class="text-neutral-600 text-sm">30 menit sebelum jadwal kelas dimulai</p>
                             </div>
                         </div>
                         <div class="flex items-start space-x-3">
-                            <i class="fa-solid fa-user-graduate text-neutral-500 mt-1"></i>
+                            <!-- <i class="fa-solid fa-user-graduate text-neutral-500 mt-1"></i> -->
+                            <font-awesome-icon icon="fa-solid fa-user-graduate" class="text-neutral-500 mt-1" />
                             <div>
                                 <h4 class="text-neutral-900 mb-1">Khusus Komti/Ketua Kelas</h4>
                                 <p class="text-neutral-600 text-sm">Hanya mahasiswa dengan peran tertentu yang dapat
@@ -30,7 +33,8 @@
                             </div>
                         </div>
                         <div class="flex items-start space-x-3">
-                            <i class="fa-solid fa-exchange-alt text-neutral-500 mt-1"></i>
+                            <!-- <i class="fa-solid fa-exchange-alt text-neutral-500 mt-1"></i> -->
+                            <font-awesome-icon icon="fa-solid fa-exchange-alt" class="text-neutral-500 mt-1" />
                             <div>
                                 <h4 class="text-neutral-900 mb-1">Transfer Otomatis ke Dosen</h4>
                                 <p class="text-neutral-600 text-sm">Hak pemilihan beralih jika mahasiswa terlambat</p>
@@ -149,7 +153,8 @@
             <div class="grid lg:grid-cols-2 gap-12 items-center">
                 <div class="space-y-6">
                     <div class="w-16 h-16 bg-neutral-100 rounded-2xl flex items-center justify-center">
-                        <i class="fa-solid fa-calendar-check text-neutral-700 text-2xl"></i>
+                        <!-- <i class="fa-solid fa-calendar-check text-neutral-700 text-2xl"></i> -->
+                        <font-awesome-icon icon="fa-solid fa-calendar-check" class="text-neutral-700 text-2xl" />
                     </div>
                     <h2 class="text-3xl text-neutral-900">Kalender & Notifikasi</h2>
                     <p class="text-lg text-neutral-600">

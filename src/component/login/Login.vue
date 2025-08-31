@@ -1,5 +1,7 @@
 <script setup>
+import api from '@/apisetting/api';
 import { useRouter } from 'vue-router';
+import { ref, computed } from 'vue';
 const route = useRouter();
 const goToRegister = () => {
     route.push('/register');
@@ -7,6 +9,23 @@ const goToRegister = () => {
 const goToDashboardBranda = () => {
     route.push('/dashboard/branda');
 }
+
+const dataForm = ref({
+    email: '',
+    password: ''
+})
+
+// validasi email
+const error_email = computed(() => {
+    if (!dataForm.value.email.trim()) {
+        return 'Email tidak boleh kosong';
+    } else if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(dataForm.value.email)) {
+        return 'Email tidak valid';
+    } else {
+        return '';
+    }
+})
+
 </script>
 <template>
     <div class="bg-neutral-50 min-h-[800px] flex items-center justify-center py-12">
@@ -17,21 +36,23 @@ const goToDashboardBranda = () => {
                         <i class="fa-solid fa-door-open text-white text-xl"></i>
                     </div>
                 </div>
-                <h1 class="text-2xl text-neutral-900 mb-2">Masuk ke Akun Anda</h1>
+                <h1 class="text-2xl text-neutral-900 mb-2">Masuk ke Akun Anda </h1>
+                <p>{{ baseurl }}</p>
                 <p class="text-neutral-600">Silakan masuk untuk mengakses sistem penjadwalan</p>
             </div>
 
             <div class="bg-white rounded-xl shadow-sm border border-neutral-200 p-8">
-                <form class="space-y-6">
+                <form @submit.prevent="" class="space-y-6">
                     <div class="space-y-2">
                         <label class="text-sm text-neutral-700" for="email">Email</label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                 <i class="fa-regular fa-envelope text-neutral-400"></i>
                             </div>
-                            <input type="email" id="email"
+                            <input v-model="dataForm.email" type="email" id="email"
                                 class="block w-full pl-10 pr-3 py-2.5 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-neutral-200 focus:border-neutral-900"
                                 placeholder="nama@universitas.ac.id">
+                            <div class="text-xs text-red-500">{{ error_email }}</div>
                         </div>
                     </div>
 
@@ -41,7 +62,7 @@ const goToDashboardBranda = () => {
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                 <i class="fa-regular fa-lock text-neutral-400"></i>
                             </div>
-                            <input type="password" id="password"
+                            <input v-model="password" type="password" id="password"
                                 class="block w-full pl-10 pr-10 py-2.5 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-neutral-200 focus:border-neutral-900"
                                 placeholder="Masukkan kata sandi">
                             <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
@@ -59,8 +80,8 @@ const goToDashboardBranda = () => {
                             sandi?</span>
                     </div>
 
-                    <button type="submit" @click="goToDashboardBranda"
-                        class="w-full bg-neutral-900 text-white py-2.5 rounded-lg hover:bg-neutral-800 transition-colors">
+                    <button type="submit"
+                        class="w-full bg-neutral-900 text-white py-2.5 rounded-lg hover:bg-neutral-800 transition-colors cursor-pointer">
                         Masuk
                     </button>
                 </form>

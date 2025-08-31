@@ -21,7 +21,8 @@
                                 <p class="text-neutral-600 mb-3">Masuk menggunakan akun mahasiswa yang telah terdaftar
                                     sebagai komti atau ketua kelas</p>
                                 <div class="text-sm text-neutral-500">
-                                    <i class="fa-solid fa-clock mr-2"></i>Waktu: Kapan saja
+                                    <font-awesome-icon icon="fa-solid fa-clock" class="mr-2" />
+                                    Waktu: Kapan saja
                                 </div>
                             </div>
                         </div>
@@ -38,7 +39,8 @@
                                 <p class="text-neutral-600 mb-3">Lihat jadwal mata kuliah dan tentukan waktu yang
                                     membutuhkan ruangan</p>
                                 <div class="text-sm text-neutral-500">
-                                    <i class="fa-solid fa-calendar mr-2"></i>Senin-Jumat, 08.00-17.00 WIB
+                                    <font-awesome-icon icon="fa-solid fa-calendar" class="mr-2" />
+                                    Senin-Jumat, 08.00-17.00 WIB
                                 </div>
                             </div>
                         </div>
@@ -56,7 +58,8 @@
                                     tersedia</p>
                                 <div class="bg-neutral-50 rounded-lg p-3 mt-3">
                                     <div class="text-sm text-neutral-600">
-                                        <i class="fa-solid fa-info-circle mr-2"></i>
+                                        <!-- <i class="fa-solid fa-info-circle mr-2"></i> -->
+                                        <font-awesome-icon icon="fa-solid fa-info-circle" class="mr-2" />
                                         Hak prioritas berlaku 30 menit sebelum jadwal kelas
                                     </div>
                                 </div>
@@ -75,7 +78,9 @@
                                 <p class="text-neutral-600 mb-3">Sistem akan mengonfirmasi pemesanan dan mengirim
                                     notifikasi</p>
                                 <div class="text-sm text-neutral-500">
-                                    <i class="fa-solid fa-bell mr-2"></i>Notifikasi otomatis via sistem
+                                    <!-- <i class="fa-solid fa-bell mr-2"></i> -->
+                                    <font-awesome-icon icon="fa-solid fa-bell" class="mr-2" />
+                                    Notifikasi otomatis via sistem
                                 </div>
                             </div>
                         </div>
@@ -86,7 +91,8 @@
                     <h3 class="text-xl text-neutral-900 mb-6">Aturan Penting untuk Mahasiswa</h3>
                     <div class="space-y-4">
                         <div class="flex items-start space-x-3">
-                            <i class="fa-solid fa-exclamation-triangle text-neutral-600 mt-1"></i>
+                            <!-- <i class="fa-solid fa-exclamation-triangle text-neutral-600 mt-1"></i> -->
+                            <font-awesome-icon icon="fa-solid fa-exclamation-triangle" class="text-neutral-600 mt-1" />
                             <div>
                                 <h4 class="text-neutral-900 mb-1">Batas Waktu Pemilihan</h4>
                                 <p class="text-sm text-neutral-600">Hak prioritas hilang jika tidak memilih dalam 30
@@ -94,7 +100,8 @@
                             </div>
                         </div>
                         <div class="flex items-start space-x-3">
-                            <i class="fa-solid fa-users text-neutral-600 mt-1"></i>
+                            <!-- <i class="fa-solid fa-users text-neutral-600 mt-1"></i> -->
+                            <font-awesome-icon icon="fa-solid fa-users" class="text-neutral-600 mt-1" />
                             <div>
                                 <h4 class="text-neutral-900 mb-1">Akses Terbatas</h4>
                                 <p class="text-sm text-neutral-600">Hanya komti/ketua kelas yang dapat memesan ruangan
@@ -102,7 +109,8 @@
                             </div>
                         </div>
                         <div class="flex items-start space-x-3">
-                            <i class="fa-solid fa-calendar-times text-neutral-600 mt-1"></i>
+                            <!-- <i class="fa-solid fa-calendar-times text-neutral-600 mt-1"></i> -->
+                            <font-awesome-icon icon="fa-solid fa-calendar-times" class="text-neutral-600 mt-1" />
                             <div>
                                 <h4 class="text-neutral-900 mb-1">Jam Operasional</h4>
                                 <p class="text-sm text-neutral-600">Sistem aktif Senin-Jumat, 08.00-17.00 WIB (istirahat
@@ -110,7 +118,8 @@
                             </div>
                         </div>
                         <div class="flex items-start space-x-3">
-                            <i class="fa-solid fa-rotate text-neutral-600 mt-1"></i>
+                            <!-- <i class="fa-solid fa-rotate text-neutral-600 mt-1"></i> -->
+                            <font-awesome-icon icon="fa-solid fa-rotate" class="text-neutral-600 mt-1" />
                             <div>
                                 <h4 class="text-neutral-900 mb-1">Pengalihan Hak</h4>
                                 <p class="text-sm text-neutral-600">Jika terlambat, hak pemilihan otomatis beralih ke

@@ -12,7 +12,8 @@
             <div class="grid md:grid-cols-2 gap-8">
                 <div class="bg-white rounded-xl p-8 shadow-sm">
                     <div class="w-12 h-12 bg-neutral-100 rounded-lg flex items-center justify-center mb-6">
-                        <i class="fa-solid fa-clock text-neutral-700 text-xl"></i>
+                        <!-- <i class="fa-solid fa-clock text-neutral-700 text-xl"></i> -->
+                        <font-awesome-icon icon="fa-solid fa-clock" class="text-neutral-700 text-xl" />
                     </div>
                     <h3 class="text-xl text-neutral-900 mb-4">Jam Operasional</h3>
                     <div class="space-y-3">
@@ -32,7 +33,8 @@
                 </div>
                 <div class="bg-white rounded-xl p-8 shadow-sm">
                     <div class="w-12 h-12 bg-neutral-100 rounded-lg flex items-center justify-center mb-6">
-                        <i class="fa-solid fa-users text-neutral-700 text-xl"></i>
+                        <!-- <i class="fa-solid fa-users text-neutral-700 text-xl"></i> -->
+                        <font-awesome-icon icon="fa-solid fa-users" class="text-neutral-700 text-xl" />
                     </div>
                     <h3 class="text-xl text-neutral-900 mb-4">Akses Ruangan Umum</h3>
                     <div class="space-y-3">

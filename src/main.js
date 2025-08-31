@@ -9,10 +9,53 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 /* import font awesome icon component */
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 /* import icons and add them to the Library */
-import { faUserSecret, faThumbsUp, faDoorOpen } from "@fortawesome/free-solid-svg-icons";
+import {
+  faUserSecret,
+  faThumbsUp,
+  faDoorOpen,
+  faHourglassHalf,
+  faCircleDot,
+  faCalendarCheck,
+  faCheck,
+  faCheckCircle,
+  faClock,
+  faUserGraduate,
+  faExchangeAlt,
+  faUsers,
+  faChalkboardTeacher,
+  faUserCog,
+  faCalendar,
+  faInfoCircle,
+  faBell,
+  faExclamationTriangle,
+  faCalendarTimes,
+  faRotate,
+} from "@fortawesome/free-solid-svg-icons";
 import { faFacebook } from "@fortawesome/free-brands-svg-icons";
 
-library.add(faUserSecret, faThumbsUp, faFacebook, faDoorOpen);
+library.add(
+  faUserSecret,
+  faThumbsUp,
+  faFacebook,
+  faDoorOpen,
+  faHourglassHalf,
+  faCircleDot,
+  faCalendarCheck,
+  faCheck,
+  faCheckCircle,
+  faClock,
+  faUserGraduate,
+  faExchangeAlt,
+  faUsers,
+  faChalkboardTeacher,
+  faUserCog,
+  faCalendar,
+  faInfoCircle,
+  faBell,
+  faExclamationTriangle,
+  faCalendarTimes,
+  faRotate
+);
 
 createApp(App)
   .component("font-awesome-icon", FontAwesomeIcon)

@@ -12,7 +12,8 @@
             <div class="grid md:grid-cols-3 gap-8">
                 <div class="text-center">
                     <div class="w-20 h-20 bg-neutral-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                        <i class="fa-solid fa-user-graduate text-neutral-700 text-2xl"></i>
+                        <!-- <i class="fa-solid fa-user-graduate text-neutral-700 text-2xl"></i> -->
+                        <font-awesome-icon icon="fa-solid fa-user-graduate" class="text-neutral-700 text-2xl" />
                     </div>
                     <h3 class="text-xl text-neutral-900 mb-4">Mahasiswa (Komti/Ketua Kelas)</h3>
                     <ul class="text-neutral-600 text-sm space-y-2">
@@ -24,7 +25,8 @@
                 </div>
                 <div class="text-center">
                     <div class="w-20 h-20 bg-neutral-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                        <i class="fa-solid fa-chalkboard-teacher text-neutral-700 text-2xl"></i>
+                        <!-- <i class="fa-solid fa-chalkboard-teacher text-neutral-700 text-2xl"></i> -->
+                        <font-awesome-icon icon="fa-solid fa-chalkboard-teacher" class="text-neutral-700 text-2xl" />
                     </div>
                     <h3 class="text-xl text-neutral-900 mb-4">Dosen</h3>
                     <ul class="text-neutral-600 text-sm space-y-2">
@@ -36,7 +38,8 @@
                 </div>
                 <div class="text-center">
                     <div class="w-20 h-20 bg-neutral-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                        <i class="fa-solid fa-user-cog text-neutral-700 text-2xl"></i>
+                        <!-- <i class="fa-solid fa-user-cog text-neutral-700 text-2xl"></i> -->
+                        <font-awesome-icon icon="fa-solid fa-user-cog" class="text-neutral-700 text-2xl" />
                     </div>
                     <h3 class="text-xl text-neutral-900 mb-4">Administrator</h3>
                     <ul class="text-neutral-600 text-sm space-y-2">

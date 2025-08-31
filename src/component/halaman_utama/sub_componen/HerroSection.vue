@@ -28,11 +28,12 @@
                     </div>
                     <div class="flex items-center space-x-8 pt-4">
                         <div class="flex items-center space-x-2">
-                            <i class="fa-solid fa-check-circle text-neutral-600"></i>
+                            <font-awesome-icon icon="fa-solid fa-check-circle" class="text-neutral-600" />
                             <span class="text-sm text-neutral-600">Sistem Prioritas Otomatis</span>
                         </div>
                         <div class="flex items-center space-x-2">
-                            <i class="fa-solid fa-clock text-neutral-600"></i>
+                            <!-- <i class="fa-solid fa-clock text-neutral-600"></i> -->
+                            <font-awesome-icon icon="fa-solid fa-clock" class="text-neutral-600" />
                             <span class="text-sm text-neutral-600">Real-Time Status</span>
                         </div>
                     </div>
