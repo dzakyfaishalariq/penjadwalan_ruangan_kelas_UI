@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import { isAuthenticated, getUserRole } from "@/utils/auth";
 import HalamanUtama from "@/component/halaman_utama/HalamanUtama.vue";
 import FiturFiturUnggulan from "@/component/fitur_fitur_unggulan/FiturFiturUnggulan.vue";
 import PanduanAplikasi from "@/component/panduan_aplikasi/PanduanAplikasi.vue";
@@ -34,18 +35,28 @@ const routes = [
     path: "/login",
     name: "login",
     component: Login,
+    meta: {
+      requiresGuest: true,
+    },
   },
   // register
   {
     path: "/register",
     name: "register",
     component: Register,
+    meta: {
+      requiresGuest: true,
+    },
   },
   // Dashbord area
   {
     path: "/dashboard/branda",
     name: "dashboard",
     component: DashboardBerandaUser,
+    meta: {
+      requiresAuth: true,
+      requiredRoles: ["Mahasiswa Biasa", "Komti", "Dosen"],
+    },
   },
 ];
 
@@ -53,6 +64,35 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
+});
+
+// Navigation Guard global
+router.beforeEach((to, from, next) => {
+  const userRole = localStorage.getItem("userRole");
+
+  if (to.matched.some((record) => record.meta.requiresGuest)) {
+    if (!!localStorage.getItem("barierToken")) {
+      return next("/dashboard/branda");
+    } else {
+      return next();
+    }
+  }
+
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
+    if (!userRole) {
+      return next("/login");
+    } else if (
+      to.meta.requiredRoles &&
+      !to.meta.requiredRoles.includes(userRole)
+    ) {
+      alert("Maaf, Anda tidak memiliki akses ke halaman ini.");
+      return next(false);
+    } else {
+      return next();
+    }
+  } else {
+    return next();
+  }
 });
 
 export default router;

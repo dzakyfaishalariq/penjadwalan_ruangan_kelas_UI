@@ -1,6 +1,21 @@
 <script setup>
 import { useRouter } from 'vue-router';
+import { logout } from '@/utils/auth';
+import { ref } from 'vue';
 const route = useRouter();
+// ambil nama di local storage
+const dataUser = ref(null);
+dataUser.value = JSON.parse(localStorage.getItem('userData'));
+
+
+// nameUser.value = dataUser.value.name;
+
+
+const handleLogout = () => {
+    if (confirm('Apakah Anda yakin ingin keluar?')) {
+        logout();
+    }
+}
 
 </script>
 <template>
@@ -9,8 +24,8 @@ const route = useRouter();
             <img src="https://api.dicebear.com/7.x/notionists/svg?scale=200&seed=123" alt="Avatar"
                 class="w-10 h-10 rounded-full">
             <div>
-                <p>Alex Johnson</p>
-                <p class="text-sm text-neutral-400">Mahasiswa</p>
+                <p>{{ dataUser.nama }}</p>
+                <p class="text-sm text-neutral-400">{{ dataUser.role }}</p>
             </div>
         </div>
 
@@ -38,7 +53,7 @@ const route = useRouter();
         </nav>
 
         <div class="mt-auto pt-6 border-t border-neutral-700">
-            <span
+            <span @click="handleLogout"
                 class="flex items-center gap-3 px-4 py-3 hover:bg-neutral-800 rounded-xl text-neutral-400 cursor-pointer">
                 <i class="fa-solid fa-right-from-bracket"></i>
                 <span>Keluar</span>

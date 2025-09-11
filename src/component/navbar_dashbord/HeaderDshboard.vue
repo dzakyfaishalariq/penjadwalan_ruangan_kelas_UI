@@ -1,7 +1,12 @@
-<script setup></script>
+<script setup>
+import { ref } from 'vue';
+const dataUser = ref(null)
+dataUser.value = JSON.parse(localStorage.getItem('userData'));
+
+</script>
 <template>
     <header class="flex justify-between items-center mb-8">
-        <h1 class="text-2xl">Selamat datang, Alex!</h1>
+        <h1 class="text-2xl">Selamat datang, {{ dataUser.nama.split(" ")[0] }}!</h1>
         <div class="relative">
             <i class="fa-regular fa-bell text-xl text-neutral-600 cursor-pointer"></i>
             <span
