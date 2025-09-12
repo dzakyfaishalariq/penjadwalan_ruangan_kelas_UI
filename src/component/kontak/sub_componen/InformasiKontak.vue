@@ -15,7 +15,8 @@
                         <div class="flex items-start space-x-4">
                             <div
                                 class="w-12 h-12 bg-neutral-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                                <i class="fa-solid fa-envelope text-neutral-700 text-lg"></i>
+                                <!-- <i class="fa-solid fa-envelope text-neutral-700 text-lg"></i> -->
+                                <font-awesome-icon icon="fa-solid fa-envelope" class="text-neutral-700 text-lg" />
                             </div>
                             <div>
                                 <h3 class="text-neutral-900 mb-1">Email Support</h3>
@@ -27,7 +28,8 @@
                         <div class="flex items-start space-x-4">
                             <div
                                 class="w-12 h-12 bg-neutral-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                                <i class="fa-solid fa-phone text-neutral-700 text-lg"></i>
+                                <!-- <i class="fa-solid fa-phone text-neutral-700 text-lg"></i> -->
+                                <font-awesome-icon icon="fa-solid fa-phone" class="text-neutral-700 text-lg" />
                             </div>
                             <div>
                                 <h3 class="text-neutral-900 mb-1">Telepon</h3>
@@ -39,7 +41,8 @@
                         <div class="flex items-start space-x-4">
                             <div
                                 class="w-12 h-12 bg-neutral-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                                <i class="fa-solid fa-map-marker-alt text-neutral-700 text-lg"></i>
+                                <!-- <i class="fa-solid fa-map-marker-alt text-neutral-700 text-lg"></i> -->
+                                <font-awesome-icon icon="fa-solid fa-map-marker-alt" class="text-neutral-700 text-lg" />
                             </div>
                             <div>
                                 <h3 class="text-neutral-900 mb-1">Alamat Kantor</h3>
@@ -51,7 +54,8 @@
                         <div class="flex items-start space-x-4">
                             <div
                                 class="w-12 h-12 bg-neutral-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                                <i class="fa-solid fa-clock text-neutral-700 text-lg"></i>
+                                <!-- <i class="fa-solid fa-clock text-neutral-700 text-lg"></i> -->
+                                <font-awesome-icon icon="fa-solid fa-clock" class="text-neutral-700 text-lg" />
                             </div>
                             <div>
                                 <h3 class="text-neutral-900 mb-1">Jam Operasional Sistem</h3>

@@ -12,6 +12,7 @@ const nim = ref('');
 const email = ref('');
 const username = ref('');
 const password = ref('');
+const typePassword = ref(true);
 
 // validasi prodi
 const error_prodi = computed(() => {
@@ -84,6 +85,10 @@ const error_role = computed(() => {
     }
 })
 
+// aktif type password
+const toggleActiveTypePassword = () => {
+    typePassword.value = !typePassword.value
+}
 // ambil data prodi api
 api.get('/prodi/0')
     .then(response => {
@@ -131,7 +136,8 @@ const goToLogin = () => {
             <div class="text-center mb-8">
                 <div class="flex items-center justify-center mb-6">
                     <div class="w-12 h-12 bg-neutral-900 rounded-xl flex items-center justify-center shadow-lg">
-                        <i class="fa-solid fa-door-open text-white text-xl"></i>
+                        <!-- <i class="fa-solid fa-door-open text-white text-xl"></i> -->
+                        <font-awesome-icon icon="fa-solid fa-door-open" class="text-white text-lg" />
                     </div>
                 </div>
                 <h1 class="text-3xl text-neutral-900 mb-2">Buat Akun Baru</h1>
@@ -143,8 +149,9 @@ const goToLogin = () => {
                     <div class="space-y-2">
                         <label class="text-sm text-neutral-700" for="role_prodi">Prodi</label>
                         <div class="relative">
-                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                <i class="fa-solid fa-users text-neutral-400"></i>
+                            <div class="absolute inset-y-0 left-0 pl-4 pb-[15px] flex items-center pointer-events-none">
+                                <!-- <i class="fa-solid fa-users text-neutral-400"></i> -->
+                                <font-awesome-icon icon="fa-solid fa-graduation-cap" class="text-neutral-400" />
                             </div>
                             <select v-model="prodiId" id="role_prodi"
                                 class="block w-full pl-12 pr-4 py-3 border border-neutral-300 rounded-xl focus:ring-2 focus:ring-neutral-900 focus:border-transparent transition-all duration-200 bg-neutral-50 focus:bg-white appearance-none">
@@ -161,8 +168,9 @@ const goToLogin = () => {
                     <div class="space-y-2">
                         <label class="text-sm text-neutral-700" for="name">Nama Lengkap</label>
                         <div class="relative">
-                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                <i class="fa-regular fa-user text-neutral-400"></i>
+                            <div class="absolute inset-y-0 left-0 pl-4 pb-[15px] flex items-center pointer-events-none">
+                                <!-- <i class="fa-regular fa-user text-neutral-400"></i> -->
+                                <font-awesome-icon icon="fa-solid fa-user" class="text-neutral-400" />
                             </div>
                             <input v-model="nama" type="text" id="name"
                                 class="block w-full pl-12 pr-4 py-3 border border-neutral-300 rounded-xl focus:ring-2 focus:ring-neutral-900 focus:border-transparent transition-all duration-200 bg-neutral-50 focus:bg-white"
@@ -174,8 +182,9 @@ const goToLogin = () => {
                     <div class="space-y-2">
                         <label class="text-sm text-neutral-700" for="email">Email</label>
                         <div class="relative">
-                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                <i class="fa-regular fa-envelope text-neutral-400"></i>
+                            <div class="absolute inset-y-0 left-0 pl-4 pb-[15px] flex items-center pointer-events-none">
+                                <!-- <i class="fa-regular fa-envelope text-neutral-400"></i> -->
+                                <font-awesome-icon icon="fa-solid fa-envelope" class="text-neutral-400" />
                             </div>
                             <input v-model="email" type="email" id="email"
                                 class="block w-full pl-12 pr-4 py-3 border border-neutral-300 rounded-xl focus:ring-2 focus:ring-neutral-900 focus:border-transparent transition-all duration-200 bg-neutral-50 focus:bg-white"
@@ -188,7 +197,8 @@ const goToLogin = () => {
                         <label class="text-sm text-neutral-700" for="nim">NIM</label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                <i class="fa-solid fa-id-card text-neutral-400"></i>
+                                <!-- <i class="fa-solid fa-id-card text-neutral-400"></i> -->
+                                <font-awesome-icon icon="fa-solid fa-id-card" class="text-neutral-400" />
                             </div>
                             <input v-model="nim" type="text" id="nim"
                                 class="block w-full pl-12 pr-4 py-3 border border-neutral-300 rounded-xl focus:ring-2 focus:ring-neutral-900 focus:border-transparent transition-all duration-200 bg-neutral-50 focus:bg-white"
@@ -201,8 +211,9 @@ const goToLogin = () => {
                     <div class="space-y-2">
                         <label class="text-sm text-neutral-700" for="role_peran">Peran</label>
                         <div class="relative">
-                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                <i class="fa-solid fa-users text-neutral-400"></i>
+                            <div class="absolute inset-y-0 left-0 pl-4 pb-[15px] flex items-center pointer-events-none">
+                                <!-- <i class="fa-solid fa-users text-neutral-400"></i> -->
+                                <font-awesome-icon icon="fa-solid fa-users" class="text-neutral-400" />
                             </div>
                             <select v-model="role" id="role_peran"
                                 class="block w-full pl-12 pr-4 py-3 border border-neutral-300 rounded-xl focus:ring-2 focus:ring-neutral-900 focus:border-transparent transition-all duration-200 bg-neutral-50 focus:bg-white appearance-none">
@@ -220,8 +231,9 @@ const goToLogin = () => {
                     <div class="space-y-2">
                         <label class="text-sm text-neutral-700" for="username">User Name</label>
                         <div class="relative">
-                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                <i class="fa-regular fa-user text-neutral-400"></i>
+                            <div class="absolute inset-y-0 left-0 pl-4 pb-[15px] flex items-center pointer-events-none">
+                                <!-- <i class="fa-regular fa-user text-neutral-400"></i> -->
+                                <font-awesome-icon icon="fa-solid fa-circle-user" class="text-neutral-400" />
                             </div>
                             <input v-model="username" type="text" id="username"
                                 class="block w-full pl-12 pr-4 py-3 border border-neutral-300 rounded-xl focus:ring-2 focus:ring-neutral-900 focus:border-transparent transition-all duration-200 bg-neutral-50 focus:bg-white"
@@ -233,15 +245,21 @@ const goToLogin = () => {
                     <div class="space-y-2">
                         <label class="text-sm text-neutral-700" for="password">Password</label>
                         <div class="relative">
-                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                <i class="fa-solid fa-key text-neutral-400"></i>
+                            <div class="absolute inset-y-0 left-0 pl-4 pb-[15px] flex items-center pointer-events-none">
+                                <!-- <i class="fa-solid fa-key text-neutral-400"></i> -->
+                                <font-awesome-icon icon="fa-solid fa-key" class="text-neutral-400" />
                             </div>
-                            <input v-model="password" type="password" id="password"
+                            <input v-model="password" :type="typePassword ? 'password' : 'text'" id="password"
                                 class="block w-full pl-12 pr-12 py-3 border border-neutral-300 rounded-xl focus:ring-2 focus:ring-neutral-900 focus:border-transparent transition-all duration-200 bg-neutral-50 focus:bg-white"
                                 placeholder="Buat password">
-                            <div class="absolute inset-y-0 right-0 pr-4 flex items-center">
-                                <i
-                                    class="fa-regular fa-eye text-neutral-400 cursor-pointer hover:text-neutral-600 transition-colors"></i>
+                            <div class="absolute inset-y-0 right-0 pr-4 pb-[15px] flex items-center">
+                                <!-- <i class="fa-regular fa-eye text-neutral-400 cursor-pointer hover:text-neutral-600 transition-colors"></i> -->
+                                <div v-if="typePassword">
+
+                                </div>
+                                <font-awesome-icon icon="fa-solid fa-eye"
+                                    class="text-neutral-400 cursor-pointer hover:text-neutral-600 transition-colors"
+                                    @click="typePassword = !typePassword" />
                             </div>
                             <p v-if="error_password" class="text-xs text-red-500">{{ error_password }}</p>
                         </div>

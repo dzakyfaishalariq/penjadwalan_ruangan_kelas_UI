@@ -66,7 +66,8 @@ const login = async () => {
             <div class="text-center mb-8">
                 <div class="flex items-center justify-center mb-6">
                     <div class="w-10 h-10 bg-neutral-800 rounded-lg flex items-center justify-center">
-                        <i class="fa-solid fa-door-open text-white text-xl"></i>
+                        <!-- <i class="fa-solid fa-door-open text-white text-xl"></i> -->
+                        <font-awesome-icon icon="fa-solid fa-door-open" class="text-white text-lg" />
                     </div>
                 </div>
                 <h1 class="text-2xl text-neutral-900 mb-2">Masuk ke Akun Anda </h1>
@@ -79,8 +80,10 @@ const login = async () => {
                     <div class="space-y-2">
                         <label class="text-sm text-neutral-700" for="email">Email</label>
                         <div class="relative">
-                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <i class="fa-regular fa-envelope text-neutral-400"></i>
+                            <div class="absolute inset-y-0 left-0 pl-3 pb-[15px] flex items-center pointer-events-none">
+                                <!-- <i class="fa-regular fa-envelope text-neutral-400"></i> -->
+                                <!-- <font-awesome-icon icon="fa-regular fa-envelope" class="text-neutral-400" /> -->
+                                <font-awesome-icon icon="fa-solid fa-envelope" class="text-neutral-400" />
                             </div>
                             <input v-model="dataForm.email" type="email" id="email"
                                 class="block w-full pl-10 pr-3 py-2.5 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-neutral-200 focus:border-neutral-900"
@@ -92,8 +95,9 @@ const login = async () => {
                     <div class="space-y-2">
                         <label class="text-sm text-neutral-700" for="password">Kata Sandi</label>
                         <div class="relative">
-                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <i class="fa-regular fa-lock text-neutral-400"></i>
+                            <div class="absolute inset-y-0 left-0 pl-3 pb-[15px] flex items-center pointer-events-none">
+                                <!-- <i class="fa-regular fa-lock text-neutral-400"></i> -->
+                                <font-awesome-icon icon="fa-solid fa-lock" class="text-neutral-400" />
                             </div>
                             <input v-model="dataForm.password" type="password" id="password"
                                 class="block w-full pl-10 pr-10 py-2.5 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-neutral-200 focus:border-neutral-900"

@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
-import { isAuthenticated, getUserRole } from "@/utils/auth";
+// import { isAuthenticated, getUserRole } from "@/utils/auth";
 import HalamanUtama from "@/component/halaman_utama/HalamanUtama.vue";
 import FiturFiturUnggulan from "@/component/fitur_fitur_unggulan/FiturFiturUnggulan.vue";
 import PanduanAplikasi from "@/component/panduan_aplikasi/PanduanAplikasi.vue";
@@ -7,6 +7,10 @@ import Kontak from "@/component/kontak/Kontak.vue";
 import Login from "@/component/login/Login.vue";
 import Register from "@/component/register/Register.vue";
 import DashboardBerandaUser from "@/component/dashbord_branda_user/DashboardBerandaUser.vue";
+import DashboardPemesananUser from "@/component/dashbord_branda_user/DashboardPemesananUser.vue";
+import DashboardKalenderUser from "@/component/dashbord_branda_user/DashboardKalenderUser.vue";
+import DashboardStatusRuangan from "@/component/dashbord_branda_user/DashboardStatusRuangan.vue";
+import DashboardPengaturanUser from "@/component/dashbord_branda_user/DashboardPengaturanUser.vue";
 
 //  create variabel routers
 const routes = [
@@ -48,11 +52,47 @@ const routes = [
       requiresGuest: true,
     },
   },
-  // Dashbord area
+  // Dashbord branda area
   {
     path: "/dashboard/branda",
     name: "dashboard",
     component: DashboardBerandaUser,
+    meta: {
+      requiresAuth: true,
+      requiredRoles: ["Mahasiswa Biasa", "Komti", "Dosen"],
+    },
+  },
+  {
+    path: "/dashboard/pemesanan",
+    name: "pemesanan",
+    component: DashboardPemesananUser,
+    meta: {
+      requiresAuth: true,
+      requiredRoles: ["Mahasiswa Biasa", "Komti", "Dosen"],
+    },
+  },
+  {
+    path: "/dashboard/kalender",
+    name: "kalender",
+    component: DashboardKalenderUser,
+    meta: {
+      requiresAuth: true,
+      requiredRoles: ["Mahasiswa Biasa", "Komti", "Dosen"],
+    },
+  },
+  {
+    path: "/dashboard/status-ruangan",
+    name: "status-ruangan",
+    component: DashboardStatusRuangan,
+    meta: {
+      requiresAuth: true,
+      requiredRoles: ["Mahasiswa Biasa", "Komti", "Dosen"],
+    },
+  },
+  {
+    path: "/dashboard/pengaturan-user",
+    name: "pengaturan-user",
+    component: DashboardPengaturanUser,
     meta: {
       requiresAuth: true,
       requiredRoles: ["Mahasiswa Biasa", "Komti", "Dosen"],
