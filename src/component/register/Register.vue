@@ -2,7 +2,7 @@
 import { ref, computed } from 'vue';
 import api from '@/apisetting/api';
 import { useRouter } from 'vue-router';
-ref
+// ref
 const route = useRouter();
 const prodiId = ref(null);
 const dataProdi = ref(null);
@@ -85,10 +85,10 @@ const error_role = computed(() => {
     }
 })
 
-// aktif type password
-const toggleActiveTypePassword = () => {
-    typePassword.value = !typePassword.value
-}
+// // aktif type password
+// const toggleActiveTypePassword = () => {
+//     typePassword.value = !typePassword.value
+// }
 // ambil data prodi api
 api.get('/prodi/0')
     .then(response => {

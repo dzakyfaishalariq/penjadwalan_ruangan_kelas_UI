@@ -40,6 +40,8 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       // Token expired atau tidak valid
       localStorage.removeItem("bariertoken");
+      localStorage.removeItem("userData");
+      localStorage.removeItem("userRole");
       sessionStorage.removeItem("bariertoken");
       // Redirect ke login atau refresh token
       // window.location.href = "/login";

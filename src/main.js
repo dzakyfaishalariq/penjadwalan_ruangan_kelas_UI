@@ -52,6 +52,8 @@ import {
   faChevronLeft,
   faChevronRight,
   faBuilding,
+  faCircleXmark,
+  faMagnifyingGlass,
 } from "@fortawesome/free-solid-svg-icons";
 import { faFacebook } from "@fortawesome/free-brands-svg-icons";
 
@@ -98,7 +100,9 @@ library.add(
   faPlus,
   faChevronLeft,
   faChevronRight,
-  faBuilding
+  faBuilding,
+  faCircleXmark,
+  faMagnifyingGlass
 );
 
 createApp(App)

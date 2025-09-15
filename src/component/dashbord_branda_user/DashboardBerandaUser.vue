@@ -1,9 +1,10 @@
 <script setup>
 import api from '@/apisetting/api';
 import { ref } from 'vue';
-
+import { useRouter } from 'vue-router';
 const totalRuanganTerpakai = ref(0);
 const totalSemuaRuangan = ref(0);
+const router = useRouter();
 // akses api total ruangan
 api.get('/mahasiswa_akses_total/ruangan_terpakai', {
     headers: {
@@ -15,6 +16,10 @@ api.get('/mahasiswa_akses_total/ruangan_terpakai', {
     })
     .catch(error => {
         console.error(error);
+        localStorage.removeItem('barierToken');
+        localStorage.removeItem('userRole');
+        localStorage.removeItem('userData');
+        // router.push('/login');
     })
 // akses total semuia ruangan
 api.get('/mahasiswa_akses_total/ruangan', {
@@ -27,8 +32,23 @@ api.get('/mahasiswa_akses_total/ruangan', {
     })
     .catch(error => {
         console.error(error);
+        localStorage.removeItem('barierToken');
+        localStorage.removeItem('userRole');
+        localStorage.removeItem('userData');
+        // router.push('/login');
     })
 
+const pindahHalamanPemesanan = () => {
+    router.push('/dashboard/pemesanan');
+}
+
+const pindahHalamanKalender = () => {
+    router.push('/dashboard/kalender');
+}
+
+const pindahHalamanStatusRuangan = () => {
+    router.push('/dashboard/status-ruangan');
+}
 </script>
 <template>
     <div class="grid grid-cols-3 gap-6 mb-8">
@@ -53,7 +73,7 @@ api.get('/mahasiswa_akses_total/ruangan', {
                 <h3>Ruangan Terpakai</h3>
             </div>
             <p class="text-2xl">{{ totalRuanganTerpakai }}<span class="text-neutral-400 text-lg">/{{ totalSemuaRuangan
-            }}</span></p>
+                    }}</span></p>
             <p class="text-sm text-neutral-500">Ruangan aktif saat ini</p>
         </div>
 
@@ -71,19 +91,19 @@ api.get('/mahasiswa_akses_total/ruangan', {
     </div>
 
     <div class="grid grid-cols-3 gap-6">
-        <button
+        <button @click="pindahHalamanPemesanan"
             class="flex items-center justify-center gap-3 bg-neutral-900 text-white p-4 rounded-xl hover:bg-neutral-800">
             <!-- <i class="fa-solid fa-plus"></i> -->
             <font-awesome-icon icon="fa-solid fa-plus" />
             <span>Pesan Ruangan</span>
         </button>
-        <button
+        <button @click="pindahHalamanKalender"
             class="flex items-center justify-center gap-3 bg-white border border-neutral-200 p-4 rounded-xl hover:bg-neutral-50">
             <!-- <i class="fa-solid fa-calendar"></i> -->
             <font-awesome-icon icon="fa-solid fa-calendar" />
             <span>Lihat Kalender</span>
         </button>
-        <button
+        <button @click="pindahHalamanStatusRuangan"
             class="flex items-center justify-center gap-3 bg-white border border-neutral-200 p-4 rounded-xl hover:bg-neutral-50">
             <!-- <i class="fa-solid fa-door-open"></i> -->
             <font-awesome-icon icon="fa-solid fa-door-open" />

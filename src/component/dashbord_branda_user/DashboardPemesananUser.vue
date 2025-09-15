@@ -1,4 +1,174 @@
 <script setup>
+import { onMounted, ref, computed } from 'vue';
+import api from '@/apisetting/api';
+// mengambil data ruangan
+const dataRuangan = ref(null);
+const dataMatakuliah = ref(null);
+const tombolAktif = ref(false);
+const loading = ref(false);
+const error = ref(null);
+const formData = ref({
+    ruangan_id: null,
+    jadwal_id: null,
+    pemilih_id: null,
+    tanggal_pemilihan: '',
+    status_pemilihan: null,
+    konfirmasi_kehadiran: '',
+})
+const statusRuangan = ref(null);
+const namaRuangan = ref('');
+const namaMatakuliah = ref('');
+const namaDosen = ref('');
+const hari = ref('');
+const jamMulai = ref('');
+const jamSelesai = ref('');
+const popapp = ref(false);
+
+// validasi inputan tanggal
+const error_tanggal = computed(() => {
+    if (!formData.value.tanggal_pemilihan) {
+        return 'Tanggal pemilihan tidak boleh kosong';
+    }
+})
+// validasi inputan Ruangan 
+const error_ruangan = computed(() => {
+    if (!formData.value.ruangan_id) {
+        return 'Ruangan tidak boleh kosong';
+    }
+})
+// validasi inputan jadwal 
+const error_jadwal = computed(() => {
+    if (!formData.value.jadwal_id) {
+        return 'Jadwal tidak boleh kosong';
+    }
+})
+
+// akses api nama ruangan 
+
+const fetchData = async () => {
+    loading.value = true;
+    error.value = null;
+    try {
+        // memanggil api
+        const [responseRuangan, responseMatakuliah] = await Promise.all([
+            api.get('/mahasiswa_akses_nama_ruangan', {
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('barierToken')
+                }
+            }),
+            api.get('/mahasiswa_akses_matkul_tersedia', {
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('barierToken')
+                }
+            })
+        ]);
+        // ambil data
+        dataRuangan.value = responseRuangan.data.data;
+        dataMatakuliah.value = responseMatakuliah.data.data;
+    } catch (error) {
+        error.value = error.response?.data?.message || 'Terjadi kesalahan';
+        if (err.response?.status === 401) {
+            alert(error.response.data.message);
+            localStorage.removeItem('barierToken');
+            localStorage.removeItem('userRole');
+            localStorage.removeItem('userData');
+            // Redirect ke halaman login
+            route.push('/login');
+        }
+    } finally {
+        loading.value = false;
+    }
+}
+
+const popappPesanRungan = () => {
+    // munculkan popaap
+    popapp.value = true;
+    // isi id si pemilih
+    const dataUser = JSON.parse(localStorage.getItem('userData'));
+    formData.value.pemilih_id = dataUser.id_pemilih;
+    formData.value.status_pemilihan = 1;
+    formData.value.konfirmasi_kehadiran = "Pending";
+}
+
+const pesanRuangan = async () => {
+    try {
+        if (error_tanggal.value || error_ruangan.value || error_jadwal.value) {
+            alert("Ruangan dan jadwal matakuliah di form tidak terisi segera isi pada form ruangan");
+            return;
+        }
+        // input ke API untuk memesan ruangan
+        const response = await api.post('/pemilihan_ruangan_mahasiswa_akses/booking', formData.value, {
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('barierToken')
+            }
+        })
+        if (response.data.status) {
+            alert("Pemesanan ruangan berhasil");
+            route.push('/dashboard/status-ruangan');
+        }
+    } catch (error) {
+        alert("Terjadi kesalahan dalam pengisian ruangan, silakan coba lagi keterangan : " + error.response.data.message);
+    }
+}
+
+const cekStatusRuangan = async () => {
+    try {
+        if (error_tanggal.value || error_ruangan.value || error_jadwal.value) {
+            alert("Ruangan dan jadwal matakuliah di form tidak terisi segera isi pada form ruangan");
+            return;
+        }
+        // memanggil api data ruangan by id
+        const responseRuangan = await api.get('/mahasiswa_akses_ruangan_by_id/' + formData.value.ruangan_id, {
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('barierToken')
+            }
+        })
+        // memanggil api data jadwal by id
+        const responseJadwal = await api.get('/mahasiswa_akses_jadwal_by_id/' + formData.value.jadwal_id, {
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('barierToken')
+            }
+        })
+        // console.log(responseRuangan.data.data);
+        statusRuangan.value = responseRuangan.data.data.status;
+        namaRuangan.value = responseRuangan.data.data.nama_ruangan;
+        namaMatakuliah.value = responseJadwal.data.data.nama_matakuliah;
+        namaDosen.value = responseJadwal.data.data.nama_dosen;
+        hari.value = responseJadwal.data.data.hari;
+        jamMulai.value = responseJadwal.data.data.jam_mulai;
+        jamSelesai.value = responseJadwal.data.data.jam_selesai;
+        if (statusRuangan.value == 1) {
+            tombolAktif.value = true;
+        }
+    } catch (error) {
+        alert("Ruangan dan jadwal matakuliah di form tidak terisi segera isi pada form ruangan");
+    }
+}
+
+const butonPopappClose = () => {
+    // hapus semua data
+    formData.value.ruangan_id = null;
+    formData.value.jadwal_id = null;
+    formData.value.pemilihan_id = null;
+    formData.value.tanggal_pemilihan = '';
+    formData.value.status_pemilihan = null;
+    formData.value.konfirmasi_kehadiran = '';
+    statusRuangan.value = null;
+    namaRuangan.value = '';
+    namaMatakuliah.value = '';
+    namaDosen.value = '';
+    hari.value = '';
+    jamMulai.value = '';
+    jamSelesai.value = '';
+    // tutup popapp
+    popapp.value = false;
+    tombolAktif.value = false;
+}
+
+onMounted(() => {
+    fetchData();
+});
+
 </script>
 <template>
     <div class="bg-white p-6 rounded-xl shadow-sm border border-neutral-200">
@@ -6,45 +176,94 @@
             <div>
                 <label class="block mb-2 text-sm">Tanggal</label>
                 <div class="relative">
-                    <input type="date" class="w-full p-3 border border-neutral-200 rounded-xl">
+                    <input v-model="formData.tanggal_pemilihan" type="date"
+                        class="w-full p-3 border border-neutral-200 rounded-xl">
                 </div>
+                <p class="text-xs text-red-400">{{ error_tanggal }}</p>
             </div>
 
             <div>
                 <label class="block mb-2 text-sm">Ruangan</label>
-                <select class="w-full p-3 border border-neutral-200 rounded-xl bg-white">
-                    <option>R.301</option>
-                    <option>R.302</option>
-                    <option>R.303</option>
+                <select v-model="formData.ruangan_id" class="w-full p-3 border border-neutral-200 rounded-xl bg-white">
+                    <option v-for="data in dataRuangan" :key="data.id" :disabled="!data.status" :value="data.id"
+                        :class="!data.status ? 'text-red-400' : ''">
+                        {{ data.nama_ruangan }}
+                    </option>
                 </select>
+                <p class="text-xs text-red-400">{{ error_ruangan }}</p>
             </div>
 
-            <div>
-                <label class="block mb-2 text-sm">Waktu Mulai</label>
-                <select class="w-full p-3 border border-neutral-200 rounded-xl bg-white">
-                    <option>08:00</option>
-                    <option>09:00</option>
-                    <option>10:00</option>
-                </select>
-            </div>
-
-            <div>
-                <label class="block mb-2 text-sm">Waktu Selesai</label>
-                <select class="w-full p-3 border border-neutral-200 rounded-xl bg-white">
-                    <option>09:40</option>
-                    <option>10:40</option>
-                    <option>11:40</option>
-                </select>
-            </div>
+        </div>
+        <div>
+            <label class="block mb-2 text-sm">Jadwal Matakuliah</label>
+            <select v-model="formData.jadwal_id" class="w-full p-3 border border-neutral-200 rounded-xl bg-white">
+                <option v-for="data in dataMatakuliah" :key="data.id" :value="data.id">
+                    {{ data.nama_matakuliah }}, {{ data.nama_dosen }} - {{ data.hari }} - waktu : {{ data.jam_mulai
+                    }}-{{ data.jam_selesai }}
+                </option>
+            </select>
+            <p class="text-xs text-red-400">{{ error_jadwal }}</p>
         </div>
 
-        <div class="flex items-center gap-3 p-4 bg-neutral-50 rounded-xl mb-6">
-            <i class="fa-solid fa-circle-check text-neutral-700"></i>
+        <div v-if="statusRuangan == 1" class="flex items-center gap-3 p-4 bg-green-50 rounded-xl mb-6 mt-4">
+            <!-- <i class="fa-solid fa-circle-check text-neutral-700"></i> -->
+            <font-awesome-icon icon="fa-solid fa-circle-check" class="text-neutral-700" />
             <span>Ruangan tersedia pada slot waktu terpilih</span>
         </div>
+        <div v-else-if="statusRuangan == 0" class="flex items-center gap-3 p-4 bg-red-50 rounded-xl mb-6 mt-4">
+            <!-- <i class="fa-solid fa-circle-xmark text-red-700"></i> -->
+            <font-awesome-icon icon="fa-solid fa-circle-xmark" class="text-neutral-700" />
+            <span>Ruangan tidak tersedia pada slot waktu terpilih</span>
+        </div>
+        <div v-else class="flex items-center gap-3 p-4 bg-yellow-50 rounded-xl mb-6 mt-4">
+            <!-- <i class="fa-solid fa-circle-info text-neutral-700"></i> -->
+            <font-awesome-icon icon="fa-solid fa-circle-info" class="text-neutral-700" />
+            <span>Ruangan belum diisi</span>
+        </div>
 
-        <button class="w-full bg-neutral-900 text-white p-4 rounded-xl hover:bg-neutral-800">
+        <button @click="cekStatusRuangan" class="w-full bg-green-900 text-white p-4 rounded-xl hover:bg-green-800">
+            Cek Status Ruangan
+        </button>
+        <button @click="popappPesanRungan" :disabled="!tombolAktif"
+            class="w-full bg-neutral-900 text-white p-4 rounded-xl mt-3 hover:bg-neutral-800"
+            :class="!tombolAktif ? 'opacity-50 cursor-not-allowed' : ''">
             Pesan Sekarang
         </button>
+    </div>
+    <div v-if="popapp" id="modal" class="fixed inset-0 bg-zinc-950/50 bg-opacity-50 flex items-center justify-center">
+        <div class="bg-white p-6 rounded-xl w-[400px]">
+            <h3 class="text-xl mb-4">Konfirmasi Pemesanan</h3>
+
+            <div class="space-y-3 mb-6">
+                <div class="flex justify-between">
+                    <span class="text-neutral-600">Ruangan</span>
+                    <span>{{ namaRuangan }}</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-neutral-600">Hari</span>
+                    <span>{{ hari }}</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-neutral-600">Tanggal</span>
+                    <span>{{ formData.tanggal_pemilihan }}</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-neutral-600">Waktu</span>
+                    <span>{{ jamMulai }} - {{ jamSelesai }} WIB</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-neutral-600">Status</span>
+                    <span class="text-neutral-900">{{ statusRuangan == 1 ? 'Tersedia' : 'Tidak Tersedia' }}</span>
+                </div>
+
+            </div>
+
+            <div class="flex gap-3">
+                <button @click="butonPopappClose"
+                    class="flex-1 border border-neutral-200 p-3 rounded-xl hover:bg-neutral-50">Batalkan</button>
+                <button @click="pesanRuangan"
+                    class="flex-1 bg-neutral-900 text-white p-3 rounded-xl hover:bg-neutral-800">Konfirmasi</button>
+            </div>
+        </div>
     </div>
 </template>

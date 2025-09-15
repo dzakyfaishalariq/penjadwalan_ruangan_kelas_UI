@@ -1,8 +1,8 @@
 <script setup>
-import { useRouter } from 'vue-router';
+// import { useRouter } from 'vue-router';
 import { logout } from '@/utils/auth';
 import { computed, ref } from 'vue';
-const route = useRouter();
+// const route = useRouter();
 // ambil nama di local storage
 const dataUser = ref(null);
 dataUser.value = JSON.parse(localStorage.getItem('userData'));
