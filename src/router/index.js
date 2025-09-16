@@ -109,9 +109,9 @@ const router = createRouter({
 // Navigation Guard global
 router.beforeEach((to, from, next) => {
   const userRole = localStorage.getItem("userRole");
-
+  const barierToken = localStorage.getItem("barierToken");
   if (to.matched.some((record) => record.meta.requiresGuest)) {
-    if (!!localStorage.getItem("barierToken")) {
+    if (!!barierToken && !!userRole) {
       return next("/dashboard/branda");
     } else {
       return next();
@@ -119,7 +119,7 @@ router.beforeEach((to, from, next) => {
   }
 
   if (to.matched.some((record) => record.meta.requiresAuth)) {
-    if (!userRole) {
+    if (!userRole && !barierToken) {
       return next("/login");
     } else if (
       to.meta.requiredRoles &&

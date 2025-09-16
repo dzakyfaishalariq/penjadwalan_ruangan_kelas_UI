@@ -105,6 +105,11 @@ library.add(
   faMagnifyingGlass
 );
 
+// if (import.meta.env.VITE_CLEAR_STORAGE) {
+//   localStorage.clear();
+//   sessionStorage.clear();
+// }
+
 createApp(App)
   .component("font-awesome-icon", FontAwesomeIcon)
   .use(router)

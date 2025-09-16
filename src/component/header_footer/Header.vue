@@ -1,6 +1,7 @@
 <script setup>
 import { useRouter } from 'vue-router';
 const route = useRouter();
+const barierToken = localStorage.getItem('barierToken')
 const goToLogin = () => {
     route.push('/login');
 }
@@ -29,7 +30,7 @@ const goToRegister = () => {
                 <router-link to="/kontak" class="text-neutral-600 hover:text-neutral-900 cursor-pointer"
                     active-class="text-neutral-900"><span>Kontak</span></router-link>
             </nav>
-            <div class="flex items-center space-x-4">
+            <div v-if="!barierToken" class="flex items-center space-x-4">
                 <button @click="goToLogin"
                     class="px-4 py-2 text-neutral-600 hover:text-neutral-900 cursor-pointer">Masuk</button>
                 <button @click="goToRegister"

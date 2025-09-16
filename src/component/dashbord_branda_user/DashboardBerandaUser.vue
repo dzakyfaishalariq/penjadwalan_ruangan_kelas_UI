@@ -5,6 +5,8 @@ import { useRouter } from 'vue-router';
 const totalRuanganTerpakai = ref(0);
 const totalSemuaRuangan = ref(0);
 const router = useRouter();
+const loadingData = ref(false);
+const progres = ref(0);
 // akses api total ruangan
 api.get('/mahasiswa_akses_total/ruangan_terpakai', {
     headers: {
@@ -12,7 +14,10 @@ api.get('/mahasiswa_akses_total/ruangan_terpakai', {
     }
 })
     .then(response => {
+        loadingData.value = false;
+        progres.value = 25;
         totalRuanganTerpakai.value = response.data.data;
+        progres.value = 50;
     })
     .catch(error => {
         console.error(error);
@@ -28,7 +33,11 @@ api.get('/mahasiswa_akses_total/ruangan', {
     }
 })
     .then(response => {
+        progres.value = 75;
         totalSemuaRuangan.value = response.data.data;
+        progres.value = 100;
+        loadingData.value = true;
+
     })
     .catch(error => {
         console.error(error);
@@ -51,6 +60,19 @@ const pindahHalamanStatusRuangan = () => {
 }
 </script>
 <template>
+    <!-- Loading Page -->
+    <div v-if="!loadingData" id="loading-screen" class="fixed inset-0 bg-white z-50 flex items-center justify-center">
+        <div class="text-center">
+            <div
+                class="w-16 h-16 border-4 border-neutral-200 border-t-neutral-900 rounded-full animate-spin mx-auto mb-4">
+            </div>
+            <h2 class="text-xl mb-2">Memuat Dashboard</h2>
+            <p class="text-neutral-600">Menyiapkan data ruangan dan jadwal...</p>
+            <div class="mt-6 w-64 bg-neutral-200 rounded-full h-2 mx-auto">
+                <div class="bg-neutral-900 h-2 rounded-full animate-pulse" :style="{ width: progres + '%' }"></div>
+            </div>
+        </div>
+    </div>
     <div class="grid grid-cols-3 gap-6 mb-8">
         <div class="bg-white p-6 rounded-xl shadow-sm border border-neutral-200">
             <div class="flex items-center gap-4 mb-3">

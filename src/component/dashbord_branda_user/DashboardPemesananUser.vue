@@ -1,11 +1,12 @@
 <script setup>
 import { onMounted, ref, computed } from 'vue';
 import api from '@/apisetting/api';
+import { useRouter } from 'vue-router';
 // mengambil data ruangan
 const dataRuangan = ref(null);
 const dataMatakuliah = ref(null);
 const tombolAktif = ref(false);
-const loading = ref(false);
+// const loading = ref(false);
 const error = ref(null);
 const formData = ref({
     ruangan_id: null,
@@ -23,7 +24,9 @@ const hari = ref('');
 const jamMulai = ref('');
 const jamSelesai = ref('');
 const popapp = ref(false);
-
+const loadingData = ref(false);
+const progres = ref(0);
+const router = useRouter();
 // validasi inputan tanggal
 const error_tanggal = computed(() => {
     if (!formData.value.tanggal_pemilihan) {
@@ -46,8 +49,10 @@ const error_jadwal = computed(() => {
 // akses api nama ruangan 
 
 const fetchData = async () => {
-    loading.value = true;
+    loadingData.value = false;
+    // loading.value = true;
     error.value = null;
+    progres.value = 25;
     try {
         // memanggil api
         const [responseRuangan, responseMatakuliah] = await Promise.all([
@@ -62,6 +67,7 @@ const fetchData = async () => {
                 }
             })
         ]);
+        progres.value = 50;
         // ambil data
         dataRuangan.value = responseRuangan.data.data;
         dataMatakuliah.value = responseMatakuliah.data.data;
@@ -73,10 +79,12 @@ const fetchData = async () => {
             localStorage.removeItem('userRole');
             localStorage.removeItem('userData');
             // Redirect ke halaman login
-            route.push('/login');
+            router.push('/login');
         }
     } finally {
-        loading.value = false;
+        progres.value = 100;
+        // loading.value = false;
+        loadingData.value = true;
     }
 }
 
@@ -104,7 +112,7 @@ const pesanRuangan = async () => {
         })
         if (response.data.status) {
             alert("Pemesanan ruangan berhasil");
-            route.push('/dashboard/status-ruangan');
+            router.push('/dashboard/status-ruangan');
         }
     } catch (error) {
         alert("Terjadi kesalahan dalam pengisian ruangan, silakan coba lagi keterangan : " + error.response.data.message);
@@ -171,6 +179,19 @@ onMounted(() => {
 
 </script>
 <template>
+    <!-- Loading Page -->
+    <div v-if="!loadingData" id="loading-screen" class="fixed inset-0 bg-white z-50 flex items-center justify-center">
+        <div class="text-center">
+            <div
+                class="w-16 h-16 border-4 border-neutral-200 border-t-neutral-900 rounded-full animate-spin mx-auto mb-4">
+            </div>
+            <h2 class="text-xl mb-2">Memuat Dashboard</h2>
+            <p class="text-neutral-600">Menyiapkan data ruangan dan jadwal...</p>
+            <div class="mt-6 w-64 bg-neutral-200 rounded-full h-2 mx-auto">
+                <div class="bg-neutral-900 h-2 rounded-full animate-pulse" :style="{ width: progres + '%' }"></div>
+            </div>
+        </div>
+    </div>
     <div class="bg-white p-6 rounded-xl shadow-sm border border-neutral-200">
         <div class="grid grid-cols-2 gap-6 mb-6">
             <div>

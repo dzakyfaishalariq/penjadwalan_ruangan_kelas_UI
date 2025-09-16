@@ -18,11 +18,11 @@ const nameTitle = ref('');
         </div>
         <div v-else-if="route().name === 'kalender'" class="flex items-center gap-6">
             <h1 class="text-2xl">Kalender Jadwal</h1>
-            <div class="flex gap-2">
+            <!-- <div class="flex gap-2">
                 <button
                     class="px-4 py-2 bg-white border border-neutral-200 rounded-lg hover:bg-neutral-50">Mingguan</button>
                 <button class="px-4 py-2 bg-neutral-900 text-white rounded-lg">Bulanan</button>
-            </div>
+            </div> -->
         </div>
         <div v-else-if="route().name === 'status-ruangan'">
             <h1 class="text-2xl">Status Ruangan Real-Time</h1>
@@ -42,12 +42,12 @@ const nameTitle = ref('');
                 class="absolute -top-1 -right-1 w-4 h-4 bg-neutral-900 text-white text-xs flex items-center justify-center rounded-full">3</span>
         </div>
         <div v-else-if="route().name === 'kalender'" class="flex items-center gap-4">
-            <button class="px-4 py-2 bg-white border border-neutral-200 rounded-lg hover:bg-neutral-50">
+            <!-- <button class="px-4 py-2 bg-white border border-neutral-200 rounded-lg hover:bg-neutral-50">
                 <i class="fa-solid fa-calendar-day mr-2"></i>Hari Ini
             </button>
             <button class="px-4 py-2 bg-neutral-900 text-white rounded-lg">
                 <i class="fa-solid fa-plus mr-2"></i>Pesan Ruangan
-            </button>
+            </button> -->
             <div class="relative">
                 <!-- <i class="fa-regular fa-bell text-xl text-neutral-600 cursor-pointer"></i> -->
                 <font-awesome-icon icon="fa-solid fa-bell" class="text-xl text-neutral-600 cursor-pointer" />

@@ -1,13 +1,15 @@
 <script setup>
+import api from '@/apisetting/api';
 import { ref, onMounted, computed } from 'vue';
 import FullCalendar from '@fullcalendar/vue3';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 
-const eventsData = ref([]);
 const selectEvents = ref(null);
 const popapp = ref(false);
+const loadingData = ref(false);
+const progres = ref(0);
 const buttonClicClose = () => {
     selectEvents.value = null;
     popapp.value = false;
@@ -28,36 +30,73 @@ const calenderOption = ref({
         selectEvents.value = {
             title: info.event.title,
             date: info.event.start,
+            waktu: info.event.extendedProps.jam_mulai.slice(0, 5) + ' - ' + info.event.extendedProps.jam_selesai.slice(0, 5),
             ruangan: info.event.extendedProps.ruangan,
             pemesan: info.event.extendedProps.pemesan,
             mataKuliah: info.event.extendedProps.mataKuliah,
-            keterangan: info.event.extendedProps.keterangan
+            keterangan: info.event.extendedProps.keterangan,
+            konfirmasi: info.event.extendedProps.konfirmasi
         }
     },
-    events: [
-        {
-            title: 'Pemakaian Ruangan',
-            date: '2025-09-01',
-            extendedProps: {
-                ruangan: 'Ruangan Perwat 1',
-                pemesan: 'Dr. Ahmad',
-                mataKuliah: 'Pemrograman Web',
-                keterangan: 'Kuliah Reguler',
-                waktu: '08:00 - 10:00'
-            }
-        },
-        {
-            title: 'event 2',
-            date: '2025-09-01'
-        }
-    ]
+    events: []
 })
 
 // panggil API dari pemesanan ruangan
+const fetchData = async () => {
+    try {
+        loadingData.value = false;
+        progres.value = 25;
+        const response = await api.get('/pemilihan_ruangan_mahasiswa_akses_semua', {
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('barierToken')
+            }
+        })
+        const data = response.data.data;
+        progres.value = 50;
+        // memasukan ke dalam eventsData
+        calenderOption.value.events = data.map(item => ({
+            id: item.pemilihan_ruangan_id,
+            title: item.nama_ruangan,
+            date: item.tanggal_pemilihan,
+            extendedProps: {
+                ruangan: item.nama_ruangan,
+                kapasitas: item.kapasitas,
+                pemesan: item.nama_pemilihan,
+                tipe_pemilih: item.tipe_pemilihan,
+                jam_mulai: item.jam_mulai,
+                jam_selesai: item.jam_selesai,
+                konfirmasi: item.konfirmasi_kehadiran
+            }
+        }))
+        progres.value = 100;
+        loadingData.value = true;
+    } catch (error) {
+        console.error(error);
+        localStorage.removeItem('barierToken');
+        localStorage.removeItem('userRole');
+        localStorage.removeItem('userData');
+    }
+}
 
+onMounted(() => {
+    fetchData();
+})
 
 </script>
 <template>
+    <!-- Loading Page -->
+    <div v-if="!loadingData" id="loading-screen" class="fixed inset-0 bg-white z-50 flex items-center justify-center">
+        <div class="text-center">
+            <div
+                class="w-16 h-16 border-4 border-neutral-200 border-t-neutral-900 rounded-full animate-spin mx-auto mb-4">
+            </div>
+            <h2 class="text-xl mb-2">Memuat Dashboard</h2>
+            <p class="text-neutral-600">Menyiapkan data ruangan dan jadwal...</p>
+            <div class="mt-6 w-64 bg-neutral-200 rounded-full h-2 mx-auto">
+                <div class="bg-neutral-900 h-2 rounded-full animate-pulse" :style="{ width: progres + '%' }"></div>
+            </div>
+        </div>
+    </div>
     <div>
         <FullCalendar :options="calenderOption" />
     </div>
@@ -92,7 +131,7 @@ const calenderOption = ref({
                     <i class="fa-solid fa-clock text-neutral-500"></i>
                     <div>
                         <p class="text-sm text-neutral-600">Waktu</p>
-                        <p id="modalTime">08:00 - 10:00 WIB</p>
+                        <p id="modalTime">{{ selectEvents.waktu }} WIB</p>
                     </div>
                 </div>
 
@@ -100,7 +139,9 @@ const calenderOption = ref({
                     <i class="fa-solid fa-calendar text-neutral-500"></i>
                     <div>
                         <p class="text-sm text-neutral-600">Tanggal</p>
-                        <p id="modalDate">22 Agustus 2025</p>
+                        <p id="modalDate">{{ selectEvents.date.getDate() }} / {{ selectEvents.date.getMonth() + 1 }} /
+                            {{
+                                selectEvents.date.getFullYear() }}</p>
                     </div>
                 </div>
 
@@ -108,7 +149,7 @@ const calenderOption = ref({
                     <i class="fa-solid fa-user text-neutral-500"></i>
                     <div>
                         <p class="text-sm text-neutral-600">Pemesan</p>
-                        <p id="modalBooker">Dr. Sarah Williams</p>
+                        <p id="modalBooker">{{ selectEvents.pemesan }}</p>
                     </div>
                 </div>
 
@@ -116,19 +157,24 @@ const calenderOption = ref({
                     <i class="fa-solid fa-info-circle text-neutral-500"></i>
                     <div>
                         <p class="text-sm text-neutral-600">Status</p>
-                        <span id="modalStatus"
-                            class="inline-flex px-2 py-1 bg-neutral-100 text-neutral-800 text-xs rounded-full">Terkonfirmasi</span>
+                        <!-- Konfirmasi Hadir -->
+                        <span v-if="selectEvents.konfirmasi == 'Hadir'"
+                            class="inline-flex px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">{{
+                                selectEvents.konfirmasi }}</span>
+                        <span v-if="selectEvents.konfirmasi == 'Pending'" id="modalStatus"
+                            class="inline-flex px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded-full">{{
+                                selectEvents.konfirmasi }}</span>
+                        <span v-if="selectEvents.konfirmasi == 'Tidak Hadir'" id="modalStatus"
+                            class="inline-flex px-2 py-1 bg-red-100 text-red-800 text-xs rounded-full">{{
+                                selectEvents.konfirmasi }}</span>
                     </div>
                 </div>
             </div>
 
             <div class="flex gap-3 mt-6">
                 <button @click="buttonClicClose"
-                    class="flex-1 px-4 py-2 bg-neutral-100 text-neutral-700 rounded-lg hover:bg-neutral-200">
+                    class="flex-1 px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200">
                     Tutup
-                </button>
-                <button class="flex-1 px-4 py-2 bg-neutral-900 text-white rounded-lg hover:bg-neutral-800">
-                    Edit Pemesanan
                 </button>
             </div>
         </div>

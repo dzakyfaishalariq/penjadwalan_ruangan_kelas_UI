@@ -11,8 +11,9 @@ const itemsPerPage = ref(6);
 const totalItems = ref(0);
 const totalPages = ref(0);
 const serchtext = ref('');
-const isLoading = ref(false);
-
+// const isLoading = ref(false);
+const loadingData = ref(false);
+const progres = ref(0);
 
 // realtime serch use watch
 let setTimeOut = null;
@@ -26,7 +27,9 @@ watch(serchtext, (newValue) => {
 // panggil api data ruangan 
 const fetchData = async (page = 1, serchData = '') => {
     try {
-        isLoading.value = true;
+        // isLoading.value = true;
+        loadingData.value = false;
+        progres.value = 25;
         const response = await api.get(`/mahasiswa_akses_ruangan/${itemsPerPage.value}`, {
             headers: {
                 'Authorization': 'Bearer ' + localStorage.getItem('barierToken')
@@ -36,6 +39,7 @@ const fetchData = async (page = 1, serchData = '') => {
                 search: serchData
             }
         });
+        progres.value = 50;
         dataRuangan.value = response.data.data.data;
         totalItems.value = response.data.data.total;
         totalPages.value = Math.ceil(totalItems.value / itemsPerPage.value);
@@ -45,7 +49,9 @@ const fetchData = async (page = 1, serchData = '') => {
         localStorage.removeItem('userRole');
         localStorage.removeItem('userData');
     } finally {
-        isLoading.value = false;
+        // isLoading.value = false;
+        progres.value = 100;
+        loadingData.value = true;
     }
 };
 
@@ -82,6 +88,19 @@ onMounted(() => {
 
 </script>
 <template>
+    <!-- Loading Page -->
+    <div v-if="!loadingData" id="loading-screen" class="fixed inset-0 bg-white z-50 flex items-center justify-center">
+        <div class="text-center">
+            <div
+                class="w-16 h-16 border-4 border-neutral-200 border-t-neutral-900 rounded-full animate-spin mx-auto mb-4">
+            </div>
+            <h2 class="text-xl mb-2">Memuat Dashboard</h2>
+            <p class="text-neutral-600">Menyiapkan data ruangan dan jadwal...</p>
+            <div class="mt-6 w-64 bg-neutral-200 rounded-full h-2 mx-auto">
+                <div class="bg-neutral-900 h-2 rounded-full animate-pulse" :style="{ width: progres + '%' }"></div>
+            </div>
+        </div>
+    </div>
     <div class="flex gap-4 mb-6">
         <div class="flex-1 flex gap-4">
             <input type="text" class="px-4 py-2 bg-white border border-neutral-200 rounded-lg" v-model.trim="serchtext">
