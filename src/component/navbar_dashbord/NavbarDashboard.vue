@@ -66,6 +66,13 @@ const handleLogout = () => {
                 <font-awesome-icon icon="fa-solid fa-calendar-plus" class="text-neutral-300" />
                 <span>Pemesanan</span>
             </router-link>
+            <router-link to="/dashboard/hasil-pemesanan"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer"
+                :class="{ 'bg-neutral-800': $route.name === 'pemesananhasil-pemesanan', 'hover:bg-neutral-800': $route.name !== 'hasil-pemesanan' }">
+                <!-- <i class="fa-solid fa-calendar-check text-neutral-300"></i> -->
+                <font-awesome-icon icon="fa-solid fa-calendar-check" class="text-neutral-300" />
+                <span>Hasil Pemesanan</span>
+            </router-link>
             <router-link to="/dashboard/kalender" class="flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer"
                 :class="{ 'bg-neutral-800': $route.name === 'kalender', 'hover:bg-neutral-800': $route.name !== 'kalender' }">
                 <!-- <i class="fa-solid fa-calendar text-neutral-300"></i> -->

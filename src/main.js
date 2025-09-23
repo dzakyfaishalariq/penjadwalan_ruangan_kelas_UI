@@ -54,6 +54,8 @@ import {
   faBuilding,
   faCircleXmark,
   faMagnifyingGlass,
+  faUserTag,
+  faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { faFacebook } from "@fortawesome/free-brands-svg-icons";
 
@@ -102,7 +104,9 @@ library.add(
   faChevronRight,
   faBuilding,
   faCircleXmark,
-  faMagnifyingGlass
+  faMagnifyingGlass,
+  faUserTag,
+  faXmark
 );
 
 // if (import.meta.env.VITE_CLEAR_STORAGE) {

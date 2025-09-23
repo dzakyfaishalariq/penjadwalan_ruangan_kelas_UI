@@ -11,6 +11,7 @@ import DashboardPemesananUser from "@/component/dashbord_branda_user/DashboardPe
 import DashboardKalenderUser from "@/component/dashbord_branda_user/DashboardKalenderUser.vue";
 import DashboardStatusRuangan from "@/component/dashbord_branda_user/DashboardStatusRuangan.vue";
 import DashboardPengaturanUser from "@/component/dashbord_branda_user/DashboardPengaturanUser.vue";
+import DashboadHasilPemesanan from "@/component/dashbord_branda_user/DashboadHasilPemesanan.vue";
 
 //  create variabel routers
 const routes = [
@@ -66,6 +67,15 @@ const routes = [
     path: "/dashboard/pemesanan",
     name: "pemesanan",
     component: DashboardPemesananUser,
+    meta: {
+      requiresAuth: true,
+      requiredRoles: ["Mahasiswa Biasa", "Komti", "Dosen"],
+    },
+  },
+  {
+    path: "/dashboard/hasil-pemesanan",
+    name: "hasil-pemesanan",
+    component: DashboadHasilPemesanan,
     meta: {
       requiresAuth: true,
       requiredRoles: ["Mahasiswa Biasa", "Komti", "Dosen"],

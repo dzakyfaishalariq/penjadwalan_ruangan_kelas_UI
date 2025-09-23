@@ -33,7 +33,7 @@ const calenderOption = ref({
             waktu: info.event.extendedProps.jam_mulai.slice(0, 5) + ' - ' + info.event.extendedProps.jam_selesai.slice(0, 5),
             ruangan: info.event.extendedProps.ruangan,
             pemesan: info.event.extendedProps.pemesan,
-            mataKuliah: info.event.extendedProps.mataKuliah,
+            // mataKuliah: info.event.extendedProps.mataKuliah,
             keterangan: info.event.extendedProps.keterangan,
             konfirmasi: info.event.extendedProps.konfirmasi
         }
@@ -53,6 +53,7 @@ const fetchData = async () => {
         })
         const data = response.data.data;
         progres.value = 50;
+        // console.log(data);
         // memasukan ke dalam eventsData
         calenderOption.value.events = data.map(item => ({
             id: item.pemilihan_ruangan_id,
@@ -119,13 +120,13 @@ onMounted(() => {
                     </div>
                 </div>
 
-                <div class="flex items-center gap-3">
+                <!-- <div class="flex items-center gap-3">
                     <i class="fa-solid fa-book text-neutral-500"></i>
                     <div>
                         <p class="text-sm text-neutral-600">Mata Kuliah</p>
                         <p id="modalSubject">{{ selectEvents.mataKuliah }}</p>
                     </div>
-                </div>
+                </div> -->
 
                 <div class="flex items-center gap-3">
                     <i class="fa-solid fa-clock text-neutral-500"></i>
