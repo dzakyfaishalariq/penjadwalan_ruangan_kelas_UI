@@ -54,23 +54,44 @@ const fetchData = async () => {
     error.value = null;
     progres.value = 25;
     try {
-        // memanggil api
-        const [responseRuangan, responseMatakuliah] = await Promise.all([
-            api.get('/mahasiswa_akses_nama_ruangan', {
-                headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem('barierToken')
-                }
-            }),
-            api.get('/mahasiswa_akses_matkul_tersedia', {
-                headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem('barierToken')
-                }
-            })
-        ]);
-        progres.value = 50;
-        // ambil data
-        dataRuangan.value = responseRuangan.data.data;
-        dataMatakuliah.value = responseMatakuliah.data.data;
+        if (localStorage.getItem('userRole') == 'Dosen') {
+            // memanggil api khususs dosen
+            const [responseRuangan, responseMatakuliah] = await Promise.all([
+                api.get('/dosen_akses_nama_ruangan', {
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('barierToken')
+                    }
+                }),
+                api.get('/dosen_akses_matkul_tersedia', {
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('barierToken')
+                    }
+                })
+            ]);
+            progres.value = 50;
+            // ambil data
+            dataRuangan.value = responseRuangan.data.data;
+            dataMatakuliah.value = responseMatakuliah.data.data;
+        } else if (localStorage.getItem('userRole') == 'Mahasiswa Biasa' || localStorage.getItem('userRole') == 'Komti') {
+            // memanggil api khusus mahasiswa
+            const [responseRuangan, responseMatakuliah] = await Promise.all([
+                api.get('/mahasiswa_akses_nama_ruangan', {
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('barierToken')
+                    }
+                }),
+                api.get('/mahasiswa_akses_matkul_tersedia', {
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('barierToken')
+                    }
+                })
+            ]);
+            progres.value = 50;
+            // ambil data
+            dataRuangan.value = responseRuangan.data.data;
+            dataMatakuliah.value = responseMatakuliah.data.data;
+            progres.value = 75;
+        }
     } catch (error) {
         error.value = error.response?.data?.message || 'Terjadi kesalahan';
         if (err.response?.status === 401) {
@@ -104,12 +125,22 @@ const pesanRuangan = async () => {
             alert("Ruangan dan jadwal matakuliah di form tidak terisi segera isi pada form ruangan");
             return;
         }
-        // input ke API untuk memesan ruangan
-        const response = await api.post('/pemilihan_ruangan_mahasiswa_akses/booking', formData.value, {
-            headers: {
-                'Authorization': 'Bearer ' + localStorage.getItem('barierToken')
-            }
-        })
+        let response;
+        if (localStorage.getItem('userRole') == 'Dosen') {
+            // input ke API untuk memesan ruangan untuk dosen
+            response = await api.post('/pemilihan_ruangan_dosen_akses/booking', formData.value, {
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('barierToken')
+                }
+            })
+        } else if (localStorage.getItem('userRole') == 'Mahasiswa Biasa' || localStorage.getItem('userRole') == 'Komti') {
+            // input ke API untuk memesan ruangan untuk mahasiswa
+            response = await api.post('/pemilihan_ruangan_mahasiswa_akses/booking', formData.value, {
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('barierToken')
+                }
+            })
+        }
         if (response.data.status) {
             alert("Pemesanan ruangan berhasil");
             router.push('/dashboard/status-ruangan');
@@ -125,18 +156,34 @@ const cekStatusRuangan = async () => {
             alert("Ruangan dan jadwal matakuliah di form tidak terisi segera isi pada form ruangan");
             return;
         }
-        // memanggil api data ruangan by id
-        const responseRuangan = await api.get('/mahasiswa_akses_ruangan_by_id/' + formData.value.ruangan_id, {
-            headers: {
-                'Authorization': 'Bearer ' + localStorage.getItem('barierToken')
-            }
-        })
-        // memanggil api data jadwal by id
-        const responseJadwal = await api.get('/mahasiswa_akses_jadwal_by_id/' + formData.value.jadwal_id, {
-            headers: {
-                'Authorization': 'Bearer ' + localStorage.getItem('barierToken')
-            }
-        })
+        let responseRuangan, responseJadwal;
+        if (localStorage.getItem('userRole') == 'Dosen') {
+            // memanggil api data ruangan by id untuk dosen
+            responseRuangan = await api.get('/dosen_akses_ruangan_by_id/' + formData.value.ruangan_id, {
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('barierToken')
+                }
+            })
+            // memanggil api data jadwal by id untuk dosen
+            responseJadwal = await api.get('/dosen_akses_jadwal_by_id/' + formData.value.jadwal_id, {
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('barierToken')
+                }
+            })
+        } else if (localStorage.getItem('userRole') == 'Mahasiswa Biasa' || localStorage.getItem('userRole') == 'Komti') {
+            // memanggil api data ruangan by id untuk mahasiswa
+            responseRuangan = await api.get('/mahasiswa_akses_ruangan_by_id/' + formData.value.ruangan_id, {
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('barierToken')
+                }
+            })
+            // memanggil api data jadwal by id
+            responseJadwal = await api.get('/mahasiswa_akses_jadwal_by_id/' + formData.value.jadwal_id, {
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('barierToken')
+                }
+            })
+        }
         // console.log(responseRuangan.data.data);
         statusRuangan.value = responseRuangan.data.data.status;
         namaRuangan.value = responseRuangan.data.data.nama_ruangan;

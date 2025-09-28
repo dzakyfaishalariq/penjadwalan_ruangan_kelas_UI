@@ -5,7 +5,9 @@ import { ref, computed } from 'vue';
 import { setAuthData } from '@/utils/auth';
 import PopAppSucsess from './PopAppSucsess.vue';
 import PopAppGagal from './PopAppGagal.vue';
+
 const route = useRouter();
+const togelLoginUser = ref("Mahasiswa")
 const goToRegister = () => {
     route.push('/register');
 }
@@ -39,24 +41,62 @@ const error_password = computed(() => {
 
 // hendel login
 const login = async () => {
-    try {
-        // memanggil api
-        const response = await api.post('/mahasiswa_login', dataForm.value);
-        // menyimpan data ke localstorage
-        setAuthData(response.data.data.api_key, response.data.data.user);
-        // cek apakah barier token ada
-        if (localStorage.getItem('barierToken')) {
-            // Redirect ke halaman yang diminta yaitu dashboard
-            route.push('/dashboard/branda')
+    if (togelLoginUser.value == 'Dosen') {
+        try {
+            if (error_email.value || error_password.value) {
+                alert('Mohon isi form dengan benar sesuai dengan keterangan tulisan merah');
+                return;
+            }
+            // memanggil api
+            const response = await api.post('/dosen_login', dataForm.value);
+            console.log(response.data);
+            // menyimpan data ke localstorage
+            setAuthData(response.data.data.api_key, response.data.data.user);
+            // cek apakah barier token ada
+            if (localStorage.getItem('barierToken')) {
+                // Redirect ke halaman yang diminta yaitu dashboard
+                route.push('/dashboard/branda')
+            }
+            else {
+                alert("Login gagal, silakan coba lagi");
+            }
+            // console.log(response.data.data.user);
+        } catch (error) {
+            alert("Login gagal, silakan coba lagi keterangan : " + error.response.data.message);
         }
-        else {
-            alert("Login gagal, silakan coba lagi");
+    } else {
+        try {
+            if (error_email.value || error_password.value) {
+                alert('Mohon isi form dengan benar sesuai dengan keterangan tulisan merah');
+                return;
+            }
+            // memanggil api
+            const response = await api.post('/mahasiswa_login', dataForm.value);
+            // menyimpan data ke localstorage
+            setAuthData(response.data.data.api_key, response.data.data.user);
+            // cek apakah barier token ada
+            if (localStorage.getItem('barierToken')) {
+                // Redirect ke halaman yang diminta yaitu dashboard
+                route.push('/dashboard/branda')
+            }
+            else {
+                alert("Login gagal, silakan coba lagi");
+            }
+            // console.log(response.data.data.user);
+        } catch (error) {
+            alert("Login gagal, silakan coba lagi keterangan : " + error.response.data.message);
         }
-        // console.log(response.data.data.user);
-    } catch (error) {
-        alert("Login gagal, silakan coba lagi keterangan : " + error.response.data.message);
     }
 }
+
+const togel_dosen = () => {
+    togelLoginUser.value = 'Dosen';
+}
+
+const togel_mahasiswa = () => {
+    togelLoginUser.value = 'Mahasiswa';
+}
+
 
 </script>
 <template>
@@ -70,13 +110,34 @@ const login = async () => {
                         <font-awesome-icon icon="fa-solid fa-door-open" class="text-white text-lg" />
                     </div>
                 </div>
-                <h1 class="text-2xl text-neutral-900 mb-2">Masuk ke Akun Anda </h1>
+                <h1 class="text-2xl text-neutral-900 mb-2">Masuk ke Akun Anda sebagai {{ togelLoginUser }} </h1>
                 <p class="text-neutral-600">Silakan masuk untuk mengakses sistem penjadwalan</p>
             </div>
 
             <!-- Login card -->
             <div class="bg-white rounded-xl shadow-sm border border-neutral-200 p-8">
                 <form @submit.prevent="login" class="space-y-6">
+                    <div>
+                        <label class="text-sm text-neutral-700 mb-2 block">Masuk sebagai</label>
+                        <div class="relative w-full bg-neutral-100 rounded-full p-1 flex border border-neutral-200">
+                            <div v-if="togelLoginUser === 'Mahasiswa'" id="toggle-bg"
+                                class="absolute top-1 left-1 w-1/2 h-[calc(100%-8px)] bg-white rounded-full shadow-md transition-transform duration-300 ease-in-out"
+                                style="transform: translateX(0%);"></div>
+                            <button type="button" @click="togel_mahasiswa"
+                                class="relative z-10 w-1/2 py-2 text-sm transition-colors duration-300 cursor-pointer"
+                                :class="{ 'text-neutral-900': togelLoginUser === 'Mahasiswa', 'text-neutral-500': togelLoginUser === 'Dosen' }">
+                                Mahasiswa
+                            </button>
+                            <div v-if="togelLoginUser === 'Dosen'" id="toggle-bg"
+                                class="absolute top-1 left-[185px] w-1/2 h-[calc(100%-8px)] bg-white rounded-full shadow-md transition-transform duration-300 ease-in-out"
+                                style="transform: translateX(0%);"></div>
+                            <button type="button" @click="togel_dosen"
+                                class="relative z-10 w-1/2 py-2 text-sm transition-colors duration-300 cursor-pointer"
+                                :class="{ 'text-neutral-900': togelLoginUser === 'Dosen', 'text-neutral-500': togelLoginUser === 'Mahasiswa' }">
+                                Dosen
+                            </button>
+                        </div>
+                    </div>
                     <div class="space-y-2">
                         <label class="text-sm text-neutral-700" for="email">Email</label>
                         <div class="relative">

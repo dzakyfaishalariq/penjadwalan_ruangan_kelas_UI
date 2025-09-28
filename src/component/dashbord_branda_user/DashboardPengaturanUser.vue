@@ -14,33 +14,65 @@ const progres = ref(0)
 
 const requestData = async () => {
     try {
-        loadingData.value = false
-        progres.value = 25
-        const request = await api.get(`/mahasiswa_akses_by_id/${dataLocal.id}`, {
-            headers: {
-                'Authorization': 'Bearer ' + localStorage.getItem("barierToken")
+        if (localStorage.getItem('userRole') == 'Dosen') {
+            // console.log('area dosen')
+            loadingData.value = false
+            progres.value = 25
+            const request = await api.get(`/dosen_akses_by_id/${dataLocal.id}`, {
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("barierToken")
+                }
+            })
+            progres.value = 50
+            const requestDataProdi = await api.get('/akses_prodi_untuk_dosen', {
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("barierToken")
+                }
+            })
+            progres.value = 75
+            myData.value = request.data.data
+            console.log(myData.value)
+            dataProdi.value = requestDataProdi.data.data
+            // console.log(myData.value)
+            myDataUpdate.value = {
+                prodi_id: myData.value.prodi_id,
+                nama: myData.value.dosen,
+                nip: myData.value.nip,
+                email: myData.value.email,
+                username: myData.value.username,
+                password: "",
+                role: myData.value.role,
             }
-        })
-        progres.value = 50
-        const requestDataProdi = await api.get('/mahasiswa_akses_prodi', {
-            headers: {
-                'Authorization': 'Bearer ' + localStorage.getItem("barierToken")
+            progres.value = 100
+        } else if (localStorage.getItem('userRole') == 'Mahasiswa Biasa' || localStorage.getItem('userRole') == 'Komti') {
+            loadingData.value = false
+            progres.value = 25
+            const request = await api.get(`/mahasiswa_akses_by_id/${dataLocal.id}`, {
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("barierToken")
+                }
+            })
+            progres.value = 50
+            const requestDataProdi = await api.get('/mahasiswa_akses_prodi', {
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("barierToken")
+                }
+            })
+            progres.value = 75
+            myData.value = request.data.data
+            dataProdi.value = requestDataProdi.data.data
+            // console.log(myData.value)
+            myDataUpdate.value = {
+                prodi_id: myData.value.prodi_id,
+                nama: myData.value.nama_mahasiswa,
+                nim: myData.value.nim_mahasiswa,
+                email: myData.value.email_mahasiswa,
+                username: myData.value.username_mahasiswa,
+                password: "",
+                role: myData.value.role_mahasiswa
             }
-        })
-        progres.value = 75
-        myData.value = request.data.data
-        dataProdi.value = requestDataProdi.data.data
-        // console.log(myData.value)
-        myDataUpdate.value = {
-            prodi_id: myData.value.prodi_id,
-            nama: myData.value.nama_mahasiswa,
-            nim: myData.value.nim_mahasiswa,
-            email: myData.value.email_mahasiswa,
-            username: myData.value.username_mahasiswa,
-            password: "",
-            role: myData.value.role_mahasiswa
+            progres.value = 100
         }
-        progres.value = 100
     } catch (error) {
         console.log(error)
     } finally {
@@ -50,17 +82,31 @@ const requestData = async () => {
 
 const updateData = async () => {
     try {
-        popapp.value = true
-        progres.value = 25
-        const request = await api.put(`/mahasiswa_akses/update/${dataLocal.id}`, myDataUpdate.value, {
-            headers: {
-                'Authorization': 'Bearer ' + localStorage.getItem("barierToken")
-            }
-        })
+        if (localStorage.getItem('userRole') == 'Dosen') {
+            popapp.value = true
+            progres.value = 25
+            const request = await api.put(`/dosen_akses/update/${dataLocal.id}`, myDataUpdate.value, {
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("barierToken")
+                }
+            })
 
-        // ganti variabel local data storage
-        progres.value = 100
-        console.log(request.data.data)
+            // ganti variabel local data storage
+            progres.value = 100
+            console.log(request.data.data)
+        } else if (localStorage.getItem('userRole') == 'Mahasiswa Biasa' || localStorage.getItem('userRole') == 'Komti') {
+            popapp.value = true
+            progres.value = 25
+            const request = await api.put(`/mahasiswa_akses/update/${dataLocal.id}`, myDataUpdate.value, {
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("barierToken")
+                }
+            })
+
+            // ganti variabel local data storage
+            progres.value = 100
+            console.log(request.data.data)
+        }
     } catch (error) {
         console.log(error)
     } finally {
@@ -141,8 +187,8 @@ onMounted(() => {
                         </div>
 
                         <div>
-                            <label class="block mb-2 text-sm text-neutral-600">NIM</label>
-                            <input type="text" v-model="myDataUpdate.nim"
+                            <label class="block mb-2 text-sm text-neutral-600">NIP</label>
+                            <input type="text" v-model="myDataUpdate.nip"
                                 class="w-full px-4 py-2 border border-neutral-200 rounded-lg">
                         </div>
 
@@ -168,8 +214,9 @@ onMounted(() => {
                             <label class="block mb-2 text-sm text-neutral-600">Role</label>
                             <select v-model="myDataUpdate.role"
                                 class="w-full px-4 py-2 border border-neutral-200 rounded-lg">
-                                <option value="Mahasiswa Biasa">Mahasiswa Biasa</option>
-                                <option value="Komti">Komti</option>
+                                <option value="Dosen" disabled>Dosen</option>
+                                <option value="Mahasiswa Biasa" disabled>Mahasiswa Biasa</option>
+                                <option value="Komti" disabled>Komti</option>
                             </select>
                         </div>
                     </div>

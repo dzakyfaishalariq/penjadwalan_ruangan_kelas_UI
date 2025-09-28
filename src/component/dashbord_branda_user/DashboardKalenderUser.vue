@@ -44,33 +44,63 @@ const calenderOption = ref({
 // panggil API dari pemesanan ruangan
 const fetchData = async () => {
     try {
-        loadingData.value = false;
-        progres.value = 25;
-        const response = await api.get('/pemilihan_ruangan_mahasiswa_akses_semua', {
-            headers: {
-                'Authorization': 'Bearer ' + localStorage.getItem('barierToken')
-            }
-        })
-        const data = response.data.data;
-        progres.value = 50;
-        // console.log(data);
-        // memasukan ke dalam eventsData
-        calenderOption.value.events = data.map(item => ({
-            id: item.pemilihan_ruangan_id,
-            title: item.nama_ruangan,
-            date: item.tanggal_pemilihan,
-            extendedProps: {
-                ruangan: item.nama_ruangan,
-                kapasitas: item.kapasitas,
-                pemesan: item.nama_pemilihan,
-                tipe_pemilih: item.tipe_pemilihan,
-                jam_mulai: item.jam_mulai,
-                jam_selesai: item.jam_selesai,
-                konfirmasi: item.konfirmasi_kehadiran
-            }
-        }))
-        progres.value = 100;
-        loadingData.value = true;
+        if (localStorage.getItem('userRole') == 'Dosen') {
+            loadingData.value = false;
+            progres.value = 25;
+            const response = await api.get('/pemilihan_ruangan_dosen_akses_semua', {
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('barierToken')
+                }
+            })
+            const data = response.data.data;
+            progres.value = 50;
+            // console.log(data);
+            // memasukan ke dalam eventsData
+            calenderOption.value.events = data.map(item => ({
+                id: item.pemilihan_ruangan_id,
+                title: item.nama_ruangan,
+                date: item.tanggal_pemilihan,
+                extendedProps: {
+                    ruangan: item.nama_ruangan,
+                    kapasitas: item.kapasitas,
+                    pemesan: item.nama_pemilihan,
+                    tipe_pemilih: item.tipe_pemilihan,
+                    jam_mulai: item.jam_mulai,
+                    jam_selesai: item.jam_selesai,
+                    konfirmasi: item.konfirmasi_kehadiran
+                }
+            }))
+            progres.value = 100;
+            loadingData.value = true;
+        } else if (localStorage.getItem('userRole') == 'Mahasiswa Biasa' || localStorage.getItem('userRole') == 'Komti') {
+            loadingData.value = false;
+            progres.value = 25;
+            const response = await api.get('/pemilihan_ruangan_mahasiswa_akses_semua', {
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('barierToken')
+                }
+            })
+            const data = response.data.data;
+            progres.value = 50;
+            // console.log(data);
+            // memasukan ke dalam eventsData
+            calenderOption.value.events = data.map(item => ({
+                id: item.pemilihan_ruangan_id,
+                title: item.nama_ruangan,
+                date: item.tanggal_pemilihan,
+                extendedProps: {
+                    ruangan: item.nama_ruangan,
+                    kapasitas: item.kapasitas,
+                    pemesan: item.nama_pemilihan,
+                    tipe_pemilih: item.tipe_pemilihan,
+                    jam_mulai: item.jam_mulai,
+                    jam_selesai: item.jam_selesai,
+                    konfirmasi: item.konfirmasi_kehadiran
+                }
+            }))
+            progres.value = 100;
+            loadingData.value = true;
+        }
     } catch (error) {
         console.error(error);
         localStorage.removeItem('barierToken');

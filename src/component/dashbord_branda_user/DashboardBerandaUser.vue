@@ -7,45 +7,80 @@ const totalSemuaRuangan = ref(0);
 const router = useRouter();
 const loadingData = ref(false);
 const progres = ref(0);
+const dataStorage = JSON.parse(localStorage.getItem('userData'));
 // akses api total ruangan
-api.get('/mahasiswa_akses_total/ruangan_terpakai', {
-    headers: {
-        'Authorization': 'Bearer ' + localStorage.getItem('barierToken')
-    }
-})
-    .then(response => {
+if (dataStorage.role == 'Komti' || dataStorage.role == 'Mahasiswa Biasa') {
+    api.get('/mahasiswa_akses_total/ruangan_terpakai', {
+        headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('barierToken')
+        }
+    })
+        .then(response => {
+            loadingData.value = false;
+            progres.value = 25;
+            totalRuanganTerpakai.value = response.data.data;
+            progres.value = 50;
+        })
+        .catch(error => {
+            console.error(error);
+            localStorage.removeItem('barierToken');
+            localStorage.removeItem('userRole');
+            localStorage.removeItem('userData');
+            // router.push('/login');
+        })
+    // akses total semuia ruangan
+    api.get('/mahasiswa_akses_total/ruangan', {
+        headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('barierToken')
+        }
+    })
+        .then(response => {
+            progres.value = 75;
+            totalSemuaRuangan.value = response.data.data;
+            progres.value = 100;
+            loadingData.value = true;
+        })
+        .catch(error => {
+            console.error(error);
+            localStorage.removeItem('barierToken');
+            localStorage.removeItem('userRole');
+            localStorage.removeItem('userData');
+            // router.push('/login');
+        })
+} else if (dataStorage.role == 'Dosen') {
+    // ambil api total ruangan yang terpaki
+    api.get('/dosen_akses_total/ruangan_terpakai', {
+        headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('barierToken')
+        }
+    }).then(response => {
         loadingData.value = false;
         progres.value = 25;
         totalRuanganTerpakai.value = response.data.data;
         progres.value = 50;
-    })
-    .catch(error => {
+    }).catch(error => {
         console.error(error);
         localStorage.removeItem('barierToken');
         localStorage.removeItem('userRole');
         localStorage.removeItem('userData');
-        // router.push('/login');
     })
-// akses total semuia ruangan
-api.get('/mahasiswa_akses_total/ruangan', {
-    headers: {
-        'Authorization': 'Bearer ' + localStorage.getItem('barierToken')
-    }
-})
-    .then(response => {
+    // akses total semua ruangan 
+    api.get('/dosen_akses_total/ruangan', {
+        headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('barierToken')
+        }
+    }).then(response => {
         progres.value = 75;
         totalSemuaRuangan.value = response.data.data;
         progres.value = 100;
         loadingData.value = true;
-
-    })
-    .catch(error => {
+    }).catch(error => {
         console.error(error);
         localStorage.removeItem('barierToken');
         localStorage.removeItem('userRole');
         localStorage.removeItem('userData');
-        // router.push('/login');
     })
+}
 
 const pindahHalamanPemesanan = () => {
     router.push('/dashboard/pemesanan');
@@ -95,7 +130,7 @@ const pindahHalamanStatusRuangan = () => {
                 <h3>Ruangan Terpakai</h3>
             </div>
             <p class="text-2xl">{{ totalRuanganTerpakai }}<span class="text-neutral-400 text-lg">/{{ totalSemuaRuangan
-                    }}</span></p>
+            }}</span></p>
             <p class="text-sm text-neutral-500">Ruangan aktif saat ini</p>
         </div>
 

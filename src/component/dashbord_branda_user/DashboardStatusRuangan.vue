@@ -27,22 +27,40 @@ watch(serchtext, (newValue) => {
 // panggil api data ruangan 
 const fetchData = async (page = 1, serchData = '') => {
     try {
-        // isLoading.value = true;
-        loadingData.value = false;
-        progres.value = 25;
-        const response = await api.get(`/mahasiswa_akses_ruangan/${itemsPerPage.value}`, {
-            headers: {
-                'Authorization': 'Bearer ' + localStorage.getItem('barierToken')
-            },
-            params: {
-                page: page,
-                search: serchData
-            }
-        });
-        progres.value = 50;
-        dataRuangan.value = response.data.data.data;
-        totalItems.value = response.data.data.total;
-        totalPages.value = Math.ceil(totalItems.value / itemsPerPage.value);
+        if (localStorage.getItem('userRole') == 'Dosen') {
+            loadingData.value = false;
+            progres.value = 25;
+            const response = await api.get(`/dosen_akses_ruangan/${itemsPerPage.value}`, {
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('barierToken')
+                },
+                params: {
+                    page: page,
+                    search: serchData
+                }
+            })
+            progres.value = 50;
+            dataRuangan.value = response.data.data.data;
+            totalItems.value = response.data.data.total;
+            totalPages.value = Math.ceil(totalItems.value / itemsPerPage.value);
+        } else if (localStorage.getItem('userRole') == 'Mahasiswa Biasa' || localStorage.getItem('userRole') == 'Komti') {
+            // isLoading.value = true;
+            loadingData.value = false;
+            progres.value = 25;
+            const response = await api.get(`/mahasiswa_akses_ruangan/${itemsPerPage.value}`, {
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('barierToken')
+                },
+                params: {
+                    page: page,
+                    search: serchData
+                }
+            });
+            progres.value = 50;
+            dataRuangan.value = response.data.data.data;
+            totalItems.value = response.data.data.total;
+            totalPages.value = Math.ceil(totalItems.value / itemsPerPage.value);
+        }
     } catch (error) {
         console.error(error);
         localStorage.removeItem('barierToken');
