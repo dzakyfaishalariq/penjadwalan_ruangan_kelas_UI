@@ -5,8 +5,8 @@ import { computed, ref } from 'vue';
 // const route = useRouter();
 // ambil nama di local storage
 const dataUser = ref(null);
+const role = localStorage.getItem('userRole');
 dataUser.value = JSON.parse(localStorage.getItem('userData'));
-
 // create avatar
 const userInitials = computed(() => {
     if (!dataUser.value.nama) return '';
@@ -94,6 +94,15 @@ const handleLogout = () => {
                 <span>Pengaturan</span>
             </router-link>
         </nav>
+
+        <div v-if="role === 'Dosen'" class="mt-auto pt-2 pb-2 border-t border-neutral-700">
+            <router-link to="/dashboard/buat-matakuliah"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer"
+                :class="{ 'bg-neutral-800': $route.name === 'buat-matakuliah', 'hover:bg-neutral-800': $route.name !== 'buat-matakuliah' }">
+                <font-awesome-icon icon="fa-solid fa-book" class="text-neutral-300" />
+                <span>Buat Matakuliah</span>
+            </router-link>
+        </div>
 
         <div class="mt-auto pt-6 border-t border-neutral-700">
             <span @click="handleLogout"

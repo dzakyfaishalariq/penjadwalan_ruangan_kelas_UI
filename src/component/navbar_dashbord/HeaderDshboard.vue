@@ -29,6 +29,9 @@ const route = useRoute();
         <div v-else-if="route.name === 'hasil-pemesanan'">
             <h1 class="text-2xl">Pemesanan Saya</h1>
         </div>
+        <div v-else-if="route.name === 'buat-matakuliah'">
+            <h1 class="text-2xl">Mata Kuliah</h1>
+        </div>
 
         <div v-if="route.name === 'dashboard'" class="relative">
             <!-- <i class="fa-regular fa-bell text-xl text-neutral-600 cursor-pointer"></i> -->
@@ -69,6 +72,16 @@ const route = useRoute();
                 <font-awesome-icon icon="fa-solid fa-bell" class="text-xl text-neutral-600 cursor-pointer" />
                 <span
                     class="absolute -top-1 -right-1 w-4 h-4 bg-neutral-900 text-white text-xs flex items-center justify-center rounded-full">2</span>
+            </div>
+        </div>
+        <div v-else-if="route.name === 'buat-matakuliah'">
+            <div class="flex items-center gap-4">
+                <div class="relative">
+                    <!-- <i class="fa-regular fa-bell text-xl text-neutral-600 cursor-pointer"></i> -->
+                    <font-awesome-icon icon="fa-solid fa-bell" class="text-xl text-neutral-600 cursor-pointer" />
+                    <span
+                        class="absolute -top-1 -right-1 w-4 h-4 bg-neutral-900 text-white text-xs flex items-center justify-center rounded-full">3</span>
+                </div>
             </div>
         </div>
     </header>

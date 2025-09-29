@@ -9,6 +9,7 @@ const dataProdi = ref(null)
 const loadingData = ref(false)
 const popapp = ref(false)
 const progres = ref(0)
+const roleUser = ref(localStorage.getItem('userRole'))
 // console.log(JSON.parse(dataLocal))
 // console.log(dataLocal.id)
 
@@ -31,7 +32,7 @@ const requestData = async () => {
             })
             progres.value = 75
             myData.value = request.data.data
-            console.log(myData.value)
+            // console.log(myData.value)
             dataProdi.value = requestDataProdi.data.data
             // console.log(myData.value)
             myDataUpdate.value = {
@@ -93,7 +94,7 @@ const updateData = async () => {
 
             // ganti variabel local data storage
             progres.value = 100
-            console.log(request.data.data)
+            // console.log(request.data.data)
         } else if (localStorage.getItem('userRole') == 'Mahasiswa Biasa' || localStorage.getItem('userRole') == 'Komti') {
             popapp.value = true
             progres.value = 25
@@ -105,7 +106,7 @@ const updateData = async () => {
 
             // ganti variabel local data storage
             progres.value = 100
-            console.log(request.data.data)
+            // console.log(request.data.data)
         }
     } catch (error) {
         console.log(error)
@@ -186,9 +187,14 @@ onMounted(() => {
                                 class="w-full px-4 py-2 border border-neutral-200 rounded-lg">
                         </div>
 
-                        <div>
+                        <div v-if="roleUser == 'Dosen'">
                             <label class="block mb-2 text-sm text-neutral-600">NIP</label>
                             <input type="text" v-model="myDataUpdate.nip"
+                                class="w-full px-4 py-2 border border-neutral-200 rounded-lg">
+                        </div>
+                        <div v-if="roleUser == 'Mahasiswa Biasa' || roleUser == 'Komti'">
+                            <label class="block mb-2 text-sm text-neutral-600">NIM</label>
+                            <input type="text" v-model="myDataUpdate.nim"
                                 class="w-full px-4 py-2 border border-neutral-200 rounded-lg">
                         </div>
 
@@ -210,13 +216,22 @@ onMounted(() => {
                                 class="w-full px-4 py-2 border border-neutral-200 rounded-lg">
                         </div>
 
-                        <div class="col-span-2">
+                        <div v-if="roleUser == 'Dosen'" class="col-span-2">
+                            <label class="block mb-2 text-sm text-neutral-600">Role</label>
+                            <select v-model="myDataUpdate.role"
+                                class="w-full px-4 py-2 border border-neutral-200 rounded-lg">
+                                <option value="Dosen">Dosen</option>
+                                <option value="Mahasiswa Biasa" disabled>Mahasiswa Biasa</option>
+                                <option value="Komti" disabled>Komti</option>
+                            </select>
+                        </div>
+                        <div v-if="roleUser == 'Mahasiswa Biasa' || roleUser == 'Komti'" class="col-span-2">
                             <label class="block mb-2 text-sm text-neutral-600">Role</label>
                             <select v-model="myDataUpdate.role"
                                 class="w-full px-4 py-2 border border-neutral-200 rounded-lg">
                                 <option value="Dosen" disabled>Dosen</option>
-                                <option value="Mahasiswa Biasa" disabled>Mahasiswa Biasa</option>
-                                <option value="Komti" disabled>Komti</option>
+                                <option value="Mahasiswa Biasa">Mahasiswa Biasa</option>
+                                <option value="Komti">Komti</option>
                             </select>
                         </div>
                     </div>

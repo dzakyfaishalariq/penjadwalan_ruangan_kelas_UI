@@ -12,6 +12,7 @@ import DashboardKalenderUser from "@/component/dashbord_branda_user/DashboardKal
 import DashboardStatusRuangan from "@/component/dashbord_branda_user/DashboardStatusRuangan.vue";
 import DashboardPengaturanUser from "@/component/dashbord_branda_user/DashboardPengaturanUser.vue";
 import DashboadHasilPemesanan from "@/component/dashbord_branda_user/DashboadHasilPemesanan.vue";
+import DashboadBuatMatakuliah from "@/component/dashbord_branda_user/DashboadBuatMatakuliah.vue";
 
 //  create variabel routers
 const routes = [
@@ -107,6 +108,20 @@ const routes = [
       requiresAuth: true,
       requiredRoles: ["Mahasiswa Biasa", "Komti", "Dosen"],
     },
+  },
+  {
+    path: "/dashboard/buat-matakuliah",
+    name: "buat-matakuliah",
+    component: DashboadBuatMatakuliah,
+    meta: {
+      requiresAuth: true,
+      requiredRoles: ["Dosen"],
+    },
+  },
+  {
+    path: "/:pathMatch(.*)*",
+    name: "not-found",
+    component: HalamanUtama,
   },
 ];
 
