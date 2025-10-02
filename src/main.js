@@ -59,6 +59,20 @@ import {
   faBook,
   faPenToSquare,
   faTrash,
+  faSignInAlt,
+  faShieldAlt,
+  faChartBar,
+  faSearch,
+  faUserShield,
+  faSort,
+  faFilter,
+  faArrowUp,
+  faChartPie,
+  faArrowDown,
+  faDownload,
+  faChartLine,
+  faFilePdf,
+  faHistory,
 } from "@fortawesome/free-solid-svg-icons";
 import { faFacebook } from "@fortawesome/free-brands-svg-icons";
 
@@ -112,7 +126,21 @@ library.add(
   faXmark,
   faBook,
   faPenToSquare,
-  faTrash
+  faTrash,
+  faSignInAlt,
+  faShieldAlt,
+  faChartBar,
+  faSearch,
+  faUserShield,
+  faSort,
+  faFilter,
+  faArrowUp,
+  faChartPie,
+  faArrowDown,
+  faDownload,
+  faChartLine,
+  faFilePdf,
+  faHistory
 );
 
 // if (import.meta.env.VITE_CLEAR_STORAGE) {
