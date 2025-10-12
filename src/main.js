@@ -73,6 +73,7 @@ import {
   faChartLine,
   faFilePdf,
   faHistory,
+  faUniversity,
 } from "@fortawesome/free-solid-svg-icons";
 import { faFacebook } from "@fortawesome/free-brands-svg-icons";
 
@@ -140,7 +141,8 @@ library.add(
   faDownload,
   faChartLine,
   faFilePdf,
-  faHistory
+  faHistory,
+  faUniversity
 );
 
 // if (import.meta.env.VITE_CLEAR_STORAGE) {

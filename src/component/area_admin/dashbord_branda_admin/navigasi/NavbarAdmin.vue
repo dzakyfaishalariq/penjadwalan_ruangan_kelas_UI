@@ -1,7 +1,14 @@
 <script setup>
+import { logout } from '@/utils/auth';
+import { ref } from 'vue';
 import { useRoute } from 'vue-router';
 const route = useRoute();
 const dataLocal = JSON.parse(localStorage.getItem('userData'))
+const isActifTombol = ref(false);
+
+const prosesLogout = () => {
+    logout("admin");
+}
 </script>
 <template>
     <div id="admin-sidebar" class="w-64 bg-white border-r border-neutral-200 fixed h-full">
@@ -39,20 +46,37 @@ const dataLocal = JSON.parse(localStorage.getItem('userData'))
                     <font-awesome-icon icon="fa-solid fa-users" class="w-5" />
                     <span class="ml-3">Manajemen Pengguna</span>
                 </router-link>
-                <router-link to="/admin/laporan"
+                <router-link to="/admin/manajemen-akademik"
+                    class="flex items-center p-3 text-neutral-600 hover:bg-neutral-50 rounded-lg cursor-pointer"
+                    :class="{ 'bg-neutral-100 text-neutral-900': $route.meta.nama_router === 'Manajemen Akademik' }">
+                    <!-- <i class="fa-solid fa-graduation-cap w-5"></i> -->
+                    <font-awesome-icon icon="fa-solid fa-graduation-cap" class="w-5" />
+                    <span class="ml-3">Manajemen Akademik</span>
+                </router-link>
+                <router-link v-if="isActifTombol" to="/admin/laporan"
                     class="flex items-center p-3 text-neutral-600 hover:bg-neutral-50 rounded-lg cursor-pointer"
                     :class="{ 'bg-neutral-100 text-neutral-900': $route.meta.nama_router === 'Laporan' }">
                     <!-- <i class="fa-solid fa-chart-bar w-5"></i> -->
                     <font-awesome-icon icon="fa-solid fa-chart-bar" class="w-5" />
                     <span class="ml-3">Laporan</span>
                 </router-link>
-                <router-link to="/admin/pengaturan"
+                <div v-if="!isActifTombol"
+                    class="flex items-center p-3 text-neutral-600 hover:bg-neutral-50 rounded-lg cursor-pointer">
+                    <font-awesome-icon icon="fa-solid fa-chart-bar" class="w-5" />
+                    <a class="ml-3" href="">Laporan : coming soon</a>
+                </div>
+                <router-link v-if="isActifTombol" to="/admin/pengaturan"
                     class="flex items-center p-3 text-neutral-600 hover:bg-neutral-50 rounded-lg cursor-pointer"
                     :class="{ 'bg-neutral-100 text-neutral-900': $route.meta.nama_router === 'Pengaturan' }">
                     <!-- <i class="fa-solid fa-cog w-5"></i> -->
                     <font-awesome-icon icon="fa-solid fa-cog" class="w-5" />
                     <span class="ml-3">Pengaturan</span>
                 </router-link>
+                <div v-if="!isActifTombol"
+                    class="flex items-center p-3 text-neutral-600 hover:bg-neutral-50 rounded-lg cursor-pointer">
+                    <font-awesome-icon icon="fa-solid fa-cog" class="w-5" />
+                    <a class="ml-3" href="">Pengaturan : coming soon</a>
+                </div>
             </nav>
         </div>
 
@@ -65,7 +89,8 @@ const dataLocal = JSON.parse(localStorage.getItem('userData'))
                     <p class="text-xs text-neutral-500">{{ dataLocal.email }}</p>
                 </div>
             </div>
-            <button class="flex items-center w-full p-2 text-neutral-600 hover:text-neutral-900 rounded-lg">
+            <button @click="prosesLogout"
+                class="flex items-center w-full p-2 text-neutral-600 hover:text-neutral-900 rounded-lg">
                 <!-- <i class="fa-solid fa-sign-out-alt w-5"></i> -->
                 <font-awesome-icon icon="fa-solid fa-sign-out-alt" class="w-5" />
                 <span class="ml-3">Logout</span>

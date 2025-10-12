@@ -16,11 +16,18 @@ export const getUserRole = () => {
 };
 
 // logout
-export const logout = () => {
-  localStorage.removeItem("barierToken");
-  localStorage.removeItem("userData");
-  localStorage.removeItem("userRole");
-  window.location.href = "/login";
+export const logout = (jenis) => {
+  if (jenis == "admin") {
+    localStorage.removeItem("barierToken");
+    localStorage.removeItem("userData");
+    localStorage.removeItem("userRole");
+    window.location.href = "/login/admin";
+  } else if (jenis == "user") {
+    localStorage.removeItem("barierToken");
+    localStorage.removeItem("userData");
+    localStorage.removeItem("userRole");
+    window.location.href = "/login";
+  }
 };
 
 // dapatkan user data

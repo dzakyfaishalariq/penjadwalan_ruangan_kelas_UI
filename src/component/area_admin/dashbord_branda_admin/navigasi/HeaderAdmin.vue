@@ -1,10 +1,22 @@
 <script setup>
 import { useRoute } from 'vue-router';
 const route = useRoute();
+// format tanggal
+const formatTanggal = {
+    day: 'numeric',
+    mounth: 'long',
+    year: 'numeric',
+    weekday: 'long',
+}
+// format waktu 
+const formatWaktu = {
+    hour: 'numeric',
+    minute: 'numeric',
+}
 // tampilkan waktu sekarang dalam bentuk 00:00
-const waktuSekarang = new Date().toLocaleTimeString();
+const waktuSekarang = new Date().toLocaleTimeString('id-ID', formatWaktu);
 // tampilkan tanggal yang terdiri dari hari, tanggal, bulan, dan tahun
-const tanggalSekarang = new Date().toLocaleDateString();
+const tanggalSekarang = new Date().toLocaleDateString('id-ID', formatTanggal);
 </script>
 <template>
     <header id="admin-header" class="bg-white border-b border-neutral-200 px-8 py-6">
@@ -21,7 +33,7 @@ const tanggalSekarang = new Date().toLocaleDateString();
                 </div>
                 <div class="text-right">
                     <p class="text-sm text-neutral-900">{{ tanggalSekarang }}</p>
-                    <p class="text-xs text-neutral-500">{{ waktuSekarang }}</p>
+                    <p class="text-xs text-neutral-500">{{ waktuSekarang }} WIB</p>
                 </div>
             </div>
         </div>

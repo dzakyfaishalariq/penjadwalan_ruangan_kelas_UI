@@ -31,7 +31,7 @@ const userInitials = computed(() => {
 
 const handleLogout = () => {
     if (confirm('Apakah Anda yakin ingin keluar?')) {
-        logout();
+        logout("user");
     }
 }
 

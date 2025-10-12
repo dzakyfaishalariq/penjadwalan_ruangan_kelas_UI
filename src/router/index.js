@@ -19,6 +19,7 @@ import DashboardManajemenRuanganAdmin from "@/component/area_admin/dashbord_bran
 import DashboardManajemenPengguna from "@/component/area_admin/dashbord_branda_admin/DashboardManajemenPengguna.vue";
 import DashboardLaporan from "@/component/area_admin/dashbord_branda_admin/DashboardLaporan.vue";
 import DashboardPengaturanAdmin from "@/component/area_admin/dashbord_branda_admin/DashboardPengaturanAdmin.vue";
+import DashboardManajemenAkademik from "@/component/area_admin/dashbord_branda_admin/DashboardManajemenAkademik.vue";
 
 //  create variabel routers
 const routes = [
@@ -165,6 +166,17 @@ const routes = [
       requiredRoles: ["admin"],
       nama_router: "Manajemen Pengguna",
       deskripsi: "Kelola data mahasiswa, komti, dan dosen dan administrator",
+    },
+  },
+  {
+    path: "/admin/manajemen-akademik",
+    name: "manajemen-akademik",
+    component: DashboardManajemenAkademik,
+    meta: {
+      requiresAuth: true,
+      requiredRoles: ["admin"],
+      nama_router: "Manajemen Akademik",
+      deskripsi: "Kelola data matakuliah dan jadwal kuliah",
     },
   },
   {

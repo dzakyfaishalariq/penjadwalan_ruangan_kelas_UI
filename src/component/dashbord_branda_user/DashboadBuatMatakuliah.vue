@@ -22,6 +22,8 @@ const dosen_id = ref(null);
 const hari = ref("");
 const jam_mulai = ref("");
 const jam_selesai = ref("");
+
+const dataLocal = JSON.parse(localStorage.getItem('userData'))
 // akse api jadwal matakuliah
 const fetchData = async (page = 1) => {
     try {
@@ -70,6 +72,7 @@ const fetchData2 = async () => {
         }
     })
     dataMatakuliah.value = responseMatakuliah.data.data
+    // console.log(dataMatakuliah.value)
     // akses dosen
     const responseDosen = await api.get('/data_akses_dosen', {
         headers: {
@@ -134,7 +137,7 @@ const tambahJadwalMatakuliah = async () => {
         hari.value = ""
         jam_mulai.value = ""
         jam_selesai.value = ""
-        console.log(response.data)
+        // console.log(response.data)
     } catch (error) {
         console.log(error)
         alert(error.response.data.message)
@@ -242,13 +245,18 @@ onMounted(() => {
 
                     <td class="p-4">
                         <div class="flex gap-2">
+                            <!-- buat tombol tidak aktif apabila bukan id dosen yang login -->
                             <button @click="editJadwalMatakuliah(item)"
-                                class="p-2 text-neutral-600 hover:bg-neutral-50 rounded-lg">
+                                class="p-2 text-neutral-600 hover:bg-neutral-50 rounded-lg" :class="{
+                                    'opacity-50 cursor-not-allowed': item.dosen_id !== dataLocal.id
+                                }">
                                 <!-- <i class="fa-solid fa-pen-to-square"></i> -->
                                 <font-awesome-icon icon="fa-solid fa-pen-to-square" />
                             </button>
                             <button @click="hapusJadwalMatakuliah(item.jadwal_matakuliah_id)"
-                                class="p-2 text-neutral-600 hover:bg-neutral-50 rounded-lg">
+                                class="p-2 text-neutral-600 hover:bg-neutral-50 rounded-lg" :class="{
+                                    'opacity-50 cursor-not-allowed': item.dosen_id !== dataLocal.id
+                                }">
                                 <!-- <i class="fa-solid fa-trash"></i> -->
                                 <font-awesome-icon icon="fa-solid fa-trash" />
                             </button>

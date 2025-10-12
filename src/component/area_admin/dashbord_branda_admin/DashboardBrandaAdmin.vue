@@ -1,4 +1,113 @@
-<script setup></script>
+<script setup>
+import api from '@/apisetting/api';
+import { onMounted, ref, watch } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
+const TotalRuanganTerpakai = ref(0);
+const TotalSemuaRuangan = ref(0);
+const TotalPenggunaAplikasi = ref(0);
+const TotalBookingHariIni = ref(0);
+const dataRuangan = ref(null);
+const dataPengguna = ref(null);
+const serchtext = ref('');
+const serchtextPengguna = ref('');
+
+let setTimeOut = null;
+watch(serchtext, (newValue) => {
+    clearTimeout(setTimeOut);
+    setTimeOut = setTimeout(() => {
+        fetchDataRuangan(1, newValue);
+    }, 500);
+})
+
+let setTimeOutPengguna = null;
+watch(serchtextPengguna, (newValue) => {
+    clearTimeout(setTimeOutPengguna);
+    setTimeOutPengguna = setTimeout(() => {
+        fetchDataPengguna(1, newValue);
+    }, 500);
+})
+const fetchData = async () => {
+    const responseTotalSemuaRuangan = await api.get('/admin_akses_total_semua_ruangan', {
+        headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('barierToken')
+        }
+    });
+    const responseTotalRuanganTerpakai = await api.get('/admin_akses_total_ruangan_terpakai', {
+        headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('barierToken')
+        }
+    })
+    const responseTotalPenggunaAplikasi = await api.get('/admin_akses_total_penggunaan_ruangan', {
+        headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('barierToken')
+        }
+    })
+    const responseTotalBookingHariIni = await api.get('/admin_akses_total_booking_hari_ini', {
+        headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('barierToken')
+        }
+    })
+    TotalRuanganTerpakai.value = responseTotalRuanganTerpakai.data.data;
+    TotalSemuaRuangan.value = responseTotalSemuaRuangan.data.data;
+    TotalPenggunaAplikasi.value = responseTotalPenggunaAplikasi.data.data;
+    TotalBookingHariIni.value = responseTotalBookingHariIni.data.data;
+}
+
+const fetchDataRuangan = async (page = 1, serchData = '') => {
+    try {
+        const response = await api.get('/admin_akses_semua_ruangan/3', {
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('barierToken')
+            },
+            params: {
+                page: page,
+                search: serchData
+            }
+        })
+        // console.log(response)
+        dataRuangan.value = response.data.data.data
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+const fetchDataPengguna = async (page = 1, serchData = '') => {
+    try {
+        const response = await api.get('admin_akses_penggunaan_aplikasi/3', {
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('barierToken')
+            },
+            params: {
+                page: page,
+                search: serchData
+            }
+        })
+        // console.log(response)
+        dataPengguna.value = response.data.data.data
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+const tambahRuangan = () => {
+    // pindah ke halaman tambah ruangan
+    router.push({ name: 'manajemen-ruangan' });
+}
+
+const tambahPengguna = () => {
+    // pindah ke halaman tambah pengguna
+    router.push({ name: 'manajemen-pengguna' });
+}
+
+onMounted(() => {
+    fetchData();
+    fetchDataRuangan(1);
+    fetchDataPengguna(1);
+})
+</script>
 <template>
     <div id="dashboard-stats" class="p-8">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
@@ -6,7 +115,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm text-neutral-600">Total Ruangan</p>
-                        <p class="text-2xl text-neutral-900">24</p>
+                        <p class="text-2xl text-neutral-900">{{ TotalSemuaRuangan }}</p>
                     </div>
                     <div class="w-12 h-12 bg-neutral-100 rounded-lg flex items-center justify-center">
                         <!-- <i class="fa-solid fa-building text-neutral-600"></i> -->
@@ -18,7 +127,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm text-neutral-600">Ruangan Aktif</p>
-                        <p class="text-2xl text-neutral-900">18</p>
+                        <p class="text-2xl text-neutral-900">{{ TotalRuanganTerpakai }}</p>
                     </div>
                     <div class="w-12 h-12 bg-neutral-100 rounded-lg flex items-center justify-center">
                         <!-- <i class="fa-solid fa-circle-dot text-neutral-600"></i> -->
@@ -30,7 +139,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm text-neutral-600">Total Pengguna</p>
-                        <p class="text-2xl text-neutral-900">156</p>
+                        <p class="text-2xl text-neutral-900">{{ TotalPenggunaAplikasi }}</p>
                     </div>
                     <div class="w-12 h-12 bg-neutral-100 rounded-lg flex items-center justify-center">
                         <!-- <i class="fa-solid fa-users text-neutral-600"></i> -->
@@ -42,7 +151,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm text-neutral-600">Booking Hari Ini</p>
-                        <p class="text-2xl text-neutral-900">32</p>
+                        <p class="text-2xl text-neutral-900">{{ TotalBookingHariIni }}</p>
                     </div>
                     <div class="w-12 h-12 bg-neutral-100 rounded-lg flex items-center justify-center">
                         <!-- <i class="fa-solid fa-calendar-check text-neutral-600"></i> -->
@@ -59,7 +168,7 @@
                 <div class="p-6 border-b border-neutral-200">
                     <div class="flex justify-between items-center">
                         <h2 class="text-lg text-neutral-900">Manajemen Ruangan</h2>
-                        <button
+                        <button @click="tambahRuangan"
                             class="flex items-center px-4 py-2 bg-neutral-900 text-white rounded-lg hover:bg-neutral-800">
                             <!-- <i class="fa-solid fa-plus mr-2"></i> -->
                             <font-awesome-icon icon="fa-solid fa-plus" class="mr-2" />
@@ -71,7 +180,7 @@
                             <!-- <i class="fa-solid fa-search absolute left-3 top-3 text-neutral-400"></i> -->
                             <font-awesome-icon icon="fa-solid fa-search"
                                 class="absolute left-3 top-3 text-neutral-400" />
-                            <input type="text" placeholder="Cari ruangan..."
+                            <input v-model.trim="serchtext" type="text" placeholder="Cari ruangan..."
                                 class="w-full pl-10 pr-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:border-neutral-500">
                         </div>
                     </div>
@@ -83,68 +192,17 @@
                                 <th class="text-left p-4 text-sm text-neutral-600">Nama Ruangan</th>
                                 <th class="text-left p-4 text-sm text-neutral-600">Kapasitas</th>
                                 <th class="text-left p-4 text-sm text-neutral-600">Status</th>
-                                <th class="text-left p-4 text-sm text-neutral-600">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="border-b border-neutral-100">
-                                <td class="p-4 text-neutral-900">Ruang 101</td>
-                                <td class="p-4 text-neutral-600">30 orang</td>
+                            <tr v-for="data in dataRuangan" :key="data.ruangan_id" class="border-b border-neutral-100">
+                                <td class="p-4 text-neutral-900">{{ data.nama_ruangan }}</td>
+                                <td class="p-4 text-neutral-600">{{ data.kapasitas }} orang</td>
                                 <td class="p-4">
-                                    <span
+                                    <span v-if="data.status == 1"
                                         class="px-2 py-1 bg-neutral-100 text-neutral-700 text-xs rounded">Tersedia</span>
-                                </td>
-                                <td class="p-4">
-                                    <div class="flex space-x-2">
-                                        <button class="p-2 text-neutral-600 hover:text-neutral-900">
-                                            <!-- <i class="fa-solid fa-edit"></i> -->
-                                            <font-awesome-icon icon="fa-solid fa-edit" />
-                                        </button>
-                                        <button class="p-2 text-neutral-600 hover:text-neutral-900">
-                                            <!-- <i class="fa-solid fa-trash"></i> -->
-                                            <font-awesome-icon icon="fa-solid fa-trash" />
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr class="border-b border-neutral-100">
-                                <td class="p-4 text-neutral-900">Ruang 102</td>
-                                <td class="p-4 text-neutral-600">25 orang</td>
-                                <td class="p-4">
-                                    <span
-                                        class="px-2 py-1 bg-neutral-200 text-neutral-800 text-xs rounded">Terpakai</span>
-                                </td>
-                                <td class="p-4">
-                                    <div class="flex space-x-2">
-                                        <button class="p-2 text-neutral-600 hover:text-neutral-900">
-                                            <!-- <i class="fa-solid fa-edit"></i> -->
-                                            <font-awesome-icon icon="fa-solid fa-edit" />
-                                        </button>
-                                        <button class="p-2 text-neutral-600 hover:text-neutral-900">
-                                            <!-- <i class="fa-solid fa-trash"></i> -->
-                                            <font-awesome-icon icon="fa-solid fa-trash" />
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="p-4 text-neutral-900">Ruang 103</td>
-                                <td class="p-4 text-neutral-600">40 orang</td>
-                                <td class="p-4">
-                                    <span
-                                        class="px-2 py-1 bg-neutral-100 text-neutral-700 text-xs rounded">Tersedia</span>
-                                </td>
-                                <td class="p-4">
-                                    <div class="flex space-x-2">
-                                        <button class="p-2 text-neutral-600 hover:text-neutral-900">
-                                            <!-- <i class="fa-solid fa-edit"></i> -->
-                                            <font-awesome-icon icon="fa-solid fa-edit" />
-                                        </button>
-                                        <button class="p-2 text-neutral-600 hover:text-neutral-900">
-                                            <!-- <i class="fa-solid fa-trash"></i> -->
-                                            <font-awesome-icon icon="fa-solid fa-trash" />
-                                        </button>
-                                    </div>
+                                    <span v-else class="px-2 py-1 bg-red-100 text-red-700 text-xs rounded">Di
+                                        Pakai</span>
                                 </td>
                             </tr>
                         </tbody>
@@ -157,7 +215,7 @@
                 <div class="p-6 border-b border-neutral-200">
                     <div class="flex justify-between items-center">
                         <h2 class="text-lg text-neutral-900">Manajemen Pengguna</h2>
-                        <button
+                        <button @click="tambahPengguna"
                             class="flex items-center px-4 py-2 bg-neutral-900 text-white rounded-lg hover:bg-neutral-800">
                             <!-- <i class="fa-solid fa-plus mr-2"></i> -->
                             <font-awesome-icon icon="fa-solid fa-plus" class="mr-2" />
@@ -169,7 +227,7 @@
                             <!-- <i class="fa-solid fa-search absolute left-3 top-3 text-neutral-400"></i> -->
                             <font-awesome-icon icon="fa-solid fa-search"
                                 class="absolute left-3 top-3 text-neutral-400" />
-                            <input type="text" placeholder="Cari pengguna..."
+                            <input v-model.trim="serchtextPengguna" type="text" placeholder="Cari pengguna..."
                                 class="w-full pl-10 pr-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:border-neutral-500">
                         </div>
                     </div>
@@ -180,86 +238,18 @@
                             <tr>
                                 <th class="text-left p-4 text-sm text-neutral-600">Nama</th>
                                 <th class="text-left p-4 text-sm text-neutral-600">Role</th>
-                                <th class="text-left p-4 text-sm text-neutral-600">Status</th>
-                                <th class="text-left p-4 text-sm text-neutral-600">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="border-b border-neutral-100">
+                            <tr v-for="data in dataPengguna" :key="data.id" class="border-b border-neutral-100">
                                 <td class="p-4">
                                     <div class="flex items-center">
                                         <img src="https://api.dicebear.com/7.x/notionists/svg?scale=200&seed=1234"
                                             alt="User" class="w-8 h-8 rounded-full mr-3">
-                                        <span class="text-neutral-900">Ahmad Rizki</span>
+                                        <span class="text-neutral-900">{{ data.nama }}</span>
                                     </div>
                                 </td>
-                                <td class="p-4 text-neutral-600">Mahasiswa</td>
-                                <td class="p-4">
-                                    <span class="px-2 py-1 bg-neutral-100 text-neutral-700 text-xs rounded">Aktif</span>
-                                </td>
-                                <td class="p-4">
-                                    <div class="flex space-x-2">
-                                        <button class="p-2 text-neutral-600 hover:text-neutral-900">
-                                            <!-- <i class="fa-solid fa-edit"></i> -->
-                                            <font-awesome-icon icon="fa-solid fa-edit" />
-                                        </button>
-                                        <button class="p-2 text-neutral-600 hover:text-neutral-900">
-                                            <!-- <i class="fa-solid fa-trash"></i> -->
-                                            <font-awesome-icon icon="fa-solid fa-trash" />
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr class="border-b border-neutral-100">
-                                <td class="p-4">
-                                    <div class="flex items-center">
-                                        <img src="https://api.dicebear.com/7.x/notionists/svg?scale=200&seed=5678"
-                                            alt="User" class="w-8 h-8 rounded-full mr-3">
-                                        <span class="text-neutral-900">Dr. Sarah Putri</span>
-                                    </div>
-                                </td>
-                                <td class="p-4 text-neutral-600">Dosen</td>
-                                <td class="p-4">
-                                    <span class="px-2 py-1 bg-neutral-100 text-neutral-700 text-xs rounded">Aktif</span>
-                                </td>
-                                <td class="p-4">
-                                    <div class="flex space-x-2">
-                                        <button class="p-2 text-neutral-600 hover:text-neutral-900">
-                                            <!-- <i class="fa-solid fa-edit"></i> -->
-                                            <font-awesome-icon icon="fa-solid fa-edit" />
-                                        </button>
-                                        <button class="p-2 text-neutral-600 hover:text-neutral-900">
-                                            <!-- <i class="fa-solid fa-trash"></i> -->
-                                            <font-awesome-icon icon="fa-solid fa-trash" />
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="p-4">
-                                    <div class="flex items-center">
-                                        <img src="https://api.dicebear.com/7.x/notionists/svg?scale=200&seed=9012"
-                                            alt="User" class="w-8 h-8 rounded-full mr-3">
-                                        <span class="text-neutral-900">Budi Santoso</span>
-                                    </div>
-                                </td>
-                                <td class="p-4 text-neutral-600">Mahasiswa</td>
-                                <td class="p-4">
-                                    <span
-                                        class="px-2 py-1 bg-neutral-200 text-neutral-800 text-xs rounded">Non-aktif</span>
-                                </td>
-                                <td class="p-4">
-                                    <div class="flex space-x-2">
-                                        <button class="p-2 text-neutral-600 hover:text-neutral-900">
-                                            <!-- <i class="fa-solid fa-edit"></i> -->
-                                            <font-awesome-icon icon="fa-solid fa-edit" />
-                                        </button>
-                                        <button class="p-2 text-neutral-600 hover:text-neutral-900">
-                                            <!-- <i class="fa-solid fa-trash"></i> -->
-                                            <font-awesome-icon icon="fa-solid fa-trash" />
-                                        </button>
-                                    </div>
-                                </td>
+                                <td class="p-4 text-neutral-600">{{ data.tipe }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -268,44 +258,6 @@
         </div>
 
         <!-- Recent Activities -->
-        <div id="recent-activities" class="mt-8 bg-white rounded-lg border border-neutral-200">
-            <div class="p-6 border-b border-neutral-200">
-                <h2 class="text-lg text-neutral-900">Aktivitas Terbaru</h2>
-            </div>
-            <div class="p-6">
-                <div class="space-y-4">
-                    <div class="flex items-center p-4 bg-neutral-50 rounded-lg">
-                        <div class="w-10 h-10 bg-neutral-200 rounded-full flex items-center justify-center mr-4">
-                            <!-- <i class="fa-solid fa-plus text-neutral-600"></i> -->
-                            <font-awesome-icon icon="fa-solid fa-plus" class="text-neutral-600" />
-                        </div>
-                        <div class="flex-1">
-                            <p class="text-neutral-900">Ruang 105 berhasil ditambahkan</p>
-                            <p class="text-sm text-neutral-600">2 menit yang lalu</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center p-4 bg-neutral-50 rounded-lg">
-                        <div class="w-10 h-10 bg-neutral-200 rounded-full flex items-center justify-center mr-4">
-                            <!-- <i class="fa-solid fa-edit text-neutral-600"></i> -->
-                            <font-awesome-icon icon="fa-solid fa-edit" class="text-neutral-600" />
-                        </div>
-                        <div class="flex-1">
-                            <p class="text-neutral-900">Data pengguna Ahmad Rizki diperbarui</p>
-                            <p class="text-sm text-neutral-600">15 menit yang lalu</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center p-4 bg-neutral-50 rounded-lg">
-                        <div class="w-10 h-10 bg-neutral-200 rounded-full flex items-center justify-center mr-4">
-                            <!-- <i class="fa-solid fa-calendar text-neutral-600"></i> -->
-                            <font-awesome-icon icon="fa-solid fa-calendar" class="text-neutral-600" />
-                        </div>
-                        <div class="flex-1">
-                            <p class="text-neutral-900">Booking ruang 102 dikonfirmasi</p>
-                            <p class="text-sm text-neutral-600">30 menit yang lalu</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        
     </div>
 </template>

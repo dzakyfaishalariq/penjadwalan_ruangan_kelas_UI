@@ -62,7 +62,7 @@ const fetchData = async () => {
                         'Authorization': 'Bearer ' + localStorage.getItem('barierToken')
                     }
                 }),
-                api.get('/dosen_akses_matkul_tersedia', {
+                api.get('/dosen_akses_jadwal_tersedia', {
                     headers: {
                         'Authorization': 'Bearer ' + localStorage.getItem('barierToken')
                     }
@@ -80,7 +80,7 @@ const fetchData = async () => {
                         'Authorization': 'Bearer ' + localStorage.getItem('barierToken')
                     }
                 }),
-                api.get('/mahasiswa_akses_matkul_tersedia', {
+                api.get('/mahasiswa_akses_jadwal_tersedia', {
                     headers: {
                         'Authorization': 'Bearer ' + localStorage.getItem('barierToken')
                     }
