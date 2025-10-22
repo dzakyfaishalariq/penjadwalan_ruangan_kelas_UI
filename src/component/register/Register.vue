@@ -14,6 +14,8 @@ const username = ref('');
 const password = ref('');
 const typePassword = ref(true);
 const toggleRegisterUser = ref('Mahasiswa')
+const loadingData = ref(false);
+const progresBarData = ref(null);
 
 const formDosen = ref({
     prodi_id: null,
@@ -66,7 +68,8 @@ const error_email = computed(() => {
 
 // validasi nim
 const error_nim = computed(() => {
-    if (!nim.value.trim()) {
+    let cek = nim.value ? nim.value.trim() : '';
+    if (!cek) {
         return 'NIM tidak boleh kosong';
     } else if (!/^\d+$/.test(nim.value)) {
         return 'NIM hanya dapat mengandung angka';
@@ -184,11 +187,14 @@ api.get('/prodi/0')
 // handel register
 const register = async () => {
     try {
+        loadingData.value = true;
+        progresBarData.value = 0;
         // cek error
         if (error_prodi.value || error_nama.value || error_email.value || error_nim.value || error_username.value || error_password.value || error_role.value) {
             alert('Mohon isi form dengan benar sesuai dengan keterangan tulisan merah');
             return;
         }
+        progresBarData.value = 30;
         const response = await api.post('/mahasiswa/add', {
             prodi_id: prodiId.value,
             nama: nama.value,
@@ -199,18 +205,32 @@ const register = async () => {
             role: role.value
         });
         if (response.data.status) {
-            alert(response.data.message);
+            progresBarData.value = 100;
+            // alert(response.data.message);
+            loadingData.value = false;
+            // hapus data
+            prodiId.value = null;
+            nama.value = '';
+            nim.value = null;
+            email.value = '';
+            username.value = '';
+            password.value = '';
+            role.value = '';
             route.push('/login');
         } else {
             return;
         }
     } catch (error) {
         console.error(error);
+    } finally {
+        loadingData.value = false;
     }
 }
 
 const registerDosen = async () => {
     try {
+        loadingData.value = true;
+        progresBarData.value = 0;
         const response = await api.post('/dosen/add', {
             prodi_id: formDosen.value.prodi_id,
             nama: formDosen.value.nama,
@@ -220,14 +240,19 @@ const registerDosen = async () => {
             password: formDosen.value.password,
             role: formDosen.value.role
         })
+        progresBarData.value = 50;
         if (response.data.status) {
+            progresBarData.value = 100;
             alert(response.data.message);
+            loadingData.value = false;
             route.push('/login');
         } else {
             return;
         }
     } catch (error) {
         console.error(error);
+    } finally {
+        loadingData.value = false;
     }
 }
 
@@ -236,6 +261,20 @@ const goToLogin = () => {
 }
 </script>
 <template>
+    <!-- Loading Page -->
+    <div v-if="loadingData" class="fixed inset-0 bg-white z-50 flex items-center justify-center">
+        <div class="text-center">
+            <div
+                class="w-16 h-16 border-4 border-neutral-200 border-t-neutral-900 rounded-full animate-spin mx-auto mb-4">
+            </div>
+            <h2 class="text-xl mb-2">Mohon Tunggu Sebentas</h2>
+            <p class="text-neutral-600">Mengirim data register...</p>
+            <div class="mt-6 w-64 bg-neutral-200 rounded-full h-2 mx-auto">
+                <div class="bg-neutral-900 h-2 rounded-full animate-pulse" :style="{ width: progresBarData + '%' }">
+                </div>
+            </div>
+        </div>
+    </div>
     <div
         class="bg-gradient-to-br from-neutral-50 to-neutral-100 min-h-[800px] flex items-center justify-center py-12 px-4">
         <div class="max-w-md w-full">

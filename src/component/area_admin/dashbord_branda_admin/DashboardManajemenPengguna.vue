@@ -13,7 +13,17 @@ const totalPagesMahasiswa = ref(0);
 const serchtextMahasiswa = ref('');
 const popappInfoMahasiswa = ref(false);
 const poappEditMahasiswa = ref(false);
+const poappTambahMahasiswa = ref(false);
 const seeMahasiswa = ref({});
+const formMahasiswa = ref({
+    prodi_id: null,
+    nama: '',
+    nim: '',
+    email: '',
+    username: '',
+    password: '',
+    role: '',
+});
 
 const currentPageDosen = ref(1);
 const itemsPerPageDosen = ref(10);
@@ -22,7 +32,17 @@ const totalPagesDosen = ref(0);
 const serchtextDosen = ref('');
 const popappInfoDosen = ref(false);
 const poappEditDosen = ref(false);
+const poappTambahDosen = ref(false);
 const seeDosen = ref({});
+const formDosen = ref({
+    prodi_id: null,
+    nama: '',
+    nip: '',
+    email: '',
+    username: '',
+    password: '',
+    role: '',
+})
 
 const infoMahasiswa = (data) => {
     popappInfoMahasiswa.value = true;
@@ -81,6 +101,31 @@ const prosesEditMahasiswa = async () => {
     }
 }
 
+const prosesTambahMahasiswa = async () => {
+    try {
+        const response = await api.post('/admin_akses_pengguna_mahasiswa/add', formMahasiswa.value, {
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('barierToken')
+            }
+        })
+        if (response.status == 200) {
+            poappTambahMahasiswa.value = false;
+            formMahasiswa.value.prodi_id = null;
+            formMahasiswa.value.nama = '';
+            formMahasiswa.value.nim = null;
+            formMahasiswa.value.email = '';
+            formMahasiswa.value.username = '';
+            formMahasiswa.value.password = '';
+            formMahasiswa.value.role = '';
+            alert(response.data.message);
+            fetchDataMahasiswa(1);
+        }
+    } catch (error) {
+        alert(error.response.data.message);
+        console.log(error)
+    }
+}
+
 const prosesHapusMahasiswa = async (id) => {
     try {
         const response = await api.delete(`/admin_akses_pengguna_mahasiswa/delete/${id}`, {
@@ -129,6 +174,31 @@ const prosesEditDosen = async () => {
             fetchDataDosen(1);
         }
     } catch (error) {
+        console.log(error)
+    }
+}
+
+const prosesTambahDosen = async () => {
+    try {
+        const response = await api.post('/admin_akses_pengguna_dosen/add', formDosen.value, {
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('barierToken')
+            }
+        })
+        if (response.status == 200) {
+            poappTambahDosen.value = false;
+            formDosen.value.prodi_id = null;
+            formDosen.value.nama = '';
+            formDosen.value.nip = null;
+            formDosen.value.email = '';
+            formDosen.value.username = '';
+            formDosen.value.password = '';
+            formDosen.value.role = '';
+            alert(response.data.message);
+            fetchDataDosen(1);
+        }
+    } catch (error) {
+        alert(error.response.data.message);
         console.log(error)
     }
 }
@@ -338,7 +408,7 @@ onMounted(() => {
                             <option>Aktif</option>
                             <option>Tidak Aktif</option>
                         </select> -->
-                        <button
+                        <button @click="poappTambahMahasiswa = true"
                             class="flex items-center px-4 py-2 bg-neutral-900 text-white rounded-lg hover:bg-neutral-800">
                             <!-- <i class="fa-solid fa-plus mr-2"></i> -->
                             <font-awesome-icon icon="fa-solid fa-plus" class="mr-2" />
@@ -467,7 +537,7 @@ onMounted(() => {
                             <option>Aktif</option>
                             <option>Tidak Aktif</option>
                         </select> -->
-                        <button
+                        <button @click="poappTambahDosen = true"
                             class="flex items-center px-4 py-2 bg-neutral-900 text-white rounded-lg hover:bg-neutral-800">
                             <!-- <i class="fa-solid fa-plus mr-2"></i> -->
                             <font-awesome-icon icon="fa-solid fa-plus" class="mr-2" />
@@ -712,7 +782,102 @@ onMounted(() => {
             </div>
         </div>
     </div>
+    <!-- modal tambah mahasiswa -->
+    <div v-if="poappTambahMahasiswa" id="add-course-modal"
+        class="fixed inset-0 bg-zinc-950/50 bg-opacity-50 flex items-center justify-center">
+        <div class="bg-white rounded-xl w-[600px] max-h-[90vh] overflow-y-auto">
+            <div class="p-6 border-b border-neutral-200">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-xl">Tambah Mahasiswa</h2>
+                    <button class="text-neutral-500 hover:text-neutral-700">
+                        <i class="fa-solid fa-times"></i>
+                    </button>
+                </div>
+            </div>
 
+            <div class="p-6 space-y-4">
+                <!-- 
+                seeMahasiswa.value.id = data.mahasiswa_id;
+                seeMahasiswa.value.prodi_id = data.prodi_id;
+                seeMahasiswa.value.nama = data.nama_mahasiswa;
+                seeMahasiswa.value.nim = data.nim_mahasiswa;
+                seeMahasiswa.value.email = data.email_mahasiswa;
+                seeMahasiswa.value.username = data.username_mahasiswa;
+                seeMahasiswa.value.password = data.password_mahasiswa;
+                seeMahasiswa.value.role = data.role_mahasiswa;
+                -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm mb-1">Nama Mahasiswa</label>
+                        <input v-model="formMahasiswa.nama" type="text"
+                            class="w-full px-3 py-2 border border-neutral-200 rounded-lg"
+                            placeholder="Masukkan nama mahasiswa">
+                    </div>
+                    <div>
+                        <label class="block text-sm mb-1">NIM</label>
+                        <input v-model="formMahasiswa.nim" type="text"
+                            class="w-full px-3 py-2 border border-neutral-200 rounded-lg"
+                            placeholder="Contoh: 00000000000000">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm mb-1">Email</label>
+                        <input v-model="formMahasiswa.email" type="email"
+                            class="w-full px-3 py-2 border border-neutral-200 rounded-lg"
+                            placeholder="Masukan Email mahasiswa">
+                    </div>
+                    <div>
+                        <label class="block text-sm mb-1">Prodi</label>
+                        <select v-model="formMahasiswa.prodi_id"
+                            class="w-full px-3 py-2 border border-neutral-200 rounded-lg">
+                            <option>Pilih Prodi</option>
+                            <hr>
+                            <option v-for="item in dataProdi" :key="item.id" :value="item.id">{{ item.nama_prodi }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm mb-1">Role</label>
+                        <select v-model="formMahasiswa.role"
+                            class="w-full px-3 py-2 border border-neutral-200 rounded-lg">
+                            <option>Pilih Role</option>
+                            <option value="Mahasiswa Biasa">Mahasiswa Biasa</option>
+                            <option value="Komti">Komti</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm mb-1">Username</label>
+                        <input v-model="formMahasiswa.username" type="text"
+                            class="w-full px-3 py-2 border border-neutral-200 rounded-lg"
+                            placeholder="Masukan Username mahasiswa">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm mb-1">password</label>
+                    <input v-model="formMahasiswa.password" type="password"
+                        class="w-full px-3 py-2 border border-neutral-200 rounded-lg"
+                        placeholder="Masukan password mahasiswa">
+                </div>
+            </div>
+
+            <div class="p-6 border-t border-neutral-200 flex justify-end gap-3">
+                <button @click="poappTambahMahasiswa = false"
+                    class="px-4 py-2 border border-neutral-200 rounded-lg hover:bg-neutral-50">
+                    Batal
+                </button>
+                <button @click="prosesTambahMahasiswa"
+                    class="px-4 py-2 bg-neutral-900 text-white rounded-lg hover:bg-neutral-800">
+                    Simpan
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- modal info dosen -->
     <div v-if="popappInfoDosen" id="modal"
@@ -843,6 +1008,100 @@ onMounted(() => {
                     Batal
                 </button>
                 <button @click="prosesEditDosen"
+                    class="px-4 py-2 bg-neutral-900 text-white rounded-lg hover:bg-neutral-800">
+                    Simpan
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- modal tambah dosen -->
+    <div v-if="poappTambahDosen" id="add-course-modal"
+        class="fixed inset-0 bg-zinc-950/50 bg-opacity-50 flex items-center justify-center">
+        <div class="bg-white rounded-xl w-[600px] max-h-[90vh] overflow-y-auto">
+            <div class="p-6 border-b border-neutral-200">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-xl">Edit Dosen</h2>
+                    <button class="text-neutral-500 hover:text-neutral-700">
+                        <i class="fa-solid fa-times"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="p-6 space-y-4">
+                <!-- 
+                seeDosen.value.id = data.dosen_id;
+                seeDosen.value.prodi_id = data.prodi_id;
+                seeDosen.value.nama = data.dosen;
+                seeDosen.value.nip = data.nip;
+                seeDosen.value.email = data.email;
+                seeDosen.value.username = data.username;
+                seeDosen.value.password = "";
+                seeDosen.value.role = "Dosen";
+                -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm mb-1">Nama Dosen</label>
+                        <input v-model="formDosen.nama" type="text"
+                            class="w-full px-3 py-2 border border-neutral-200 rounded-lg"
+                            placeholder="Masukkan nama Dosen">
+                    </div>
+                    <div>
+                        <label class="block text-sm mb-1">NIP</label>
+                        <input v-model="formDosen.nip" type="text"
+                            class="w-full px-3 py-2 border border-neutral-200 rounded-lg"
+                            placeholder="Contoh: 197512031998031002">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm mb-1">Email</label>
+                        <input v-model="formDosen.email" type="email"
+                            class="w-full px-3 py-2 border border-neutral-200 rounded-lg"
+                            placeholder="Masukan Email mahasiswa">
+                    </div>
+                    <div>
+                        <label class="block text-sm mb-1">Prodi</label>
+                        <select v-model="formDosen.prodi_id"
+                            class="w-full px-3 py-2 border border-neutral-200 rounded-lg">
+                            <option>Pilih Prodi</option>
+                            <hr>
+                            <option v-for="item in dataProdi" :key="item.id" :value="item.id">{{ item.nama_prodi }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm mb-1">Role</label>
+                        <select v-model="formDosen.role" class="w-full px-3 py-2 border border-neutral-200 rounded-lg">
+                            <option>Pilih Role</option>
+                            <option value="Dosen">Dosen</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm mb-1">Username</label>
+                        <input v-model="formDosen.username" type="text"
+                            class="w-full px-3 py-2 border border-neutral-200 rounded-lg"
+                            placeholder="Masukan Username mahasiswa">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm mb-1">password</label>
+                    <input v-model="formDosen.password" type="password"
+                        class="w-full px-3 py-2 border border-neutral-200 rounded-lg"
+                        placeholder="Masukan password mahasiswa">
+                </div>
+            </div>
+
+            <div class="p-6 border-t border-neutral-200 flex justify-end gap-3">
+                <button @click="poappTambahDosen = false"
+                    class="px-4 py-2 border border-neutral-200 rounded-lg hover:bg-neutral-50">
+                    Batal
+                </button>
+                <button @click="prosesTambahDosen"
                     class="px-4 py-2 bg-neutral-900 text-white rounded-lg hover:bg-neutral-800">
                     Simpan
                 </button>

@@ -879,14 +879,12 @@ onMounted(() => {
                         Menampilkan 1 - {{ itemsPerPageMatkul }} dari {{ totalItemsMatkul }} fakultas
                     </p>
                     <div class="flex items-center space-x-2">
-                        <button @click="prevPageProdi"
+                        <button @click="prevPageMatkul"
                             class="px-3 py-1 border border-neutral-300 rounded text-sm text-neutral-600 hover:bg-neutral-50">
                             Sebelumnya
                         </button>
-                        <button class="px-3 py-1 bg-neutral-900 text-white rounded text-sm">1</button>
-                        <button
-                            class="px-3 py-1 border border-neutral-300 rounded text-sm text-neutral-600 hover:bg-neutral-50">2</button>
-                        <button @click="nextPageProdi"
+
+                        <button @click="nextPageMatkul"
                             class="px-3 py-1 border border-neutral-300 rounded text-sm text-neutral-600 hover:bg-neutral-50">
                             Selanjutnya
                         </button>
