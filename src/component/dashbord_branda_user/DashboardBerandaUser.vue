@@ -16,7 +16,7 @@ if (dataStorage.role == 'Komti' || dataStorage.role == 'Mahasiswa Biasa') {
         }
     })
         .then(response => {
-            loadingData.value = false;
+            // loadingData.value = false;
             progres.value = 25;
             totalRuanganTerpakai.value = response.data.data;
             progres.value = 50;
@@ -38,7 +38,7 @@ if (dataStorage.role == 'Komti' || dataStorage.role == 'Mahasiswa Biasa') {
             progres.value = 75;
             totalSemuaRuangan.value = response.data.data;
             progres.value = 100;
-            loadingData.value = true;
+            // loadingData.value = true;
         })
         .catch(error => {
             console.error(error);
@@ -54,7 +54,7 @@ if (dataStorage.role == 'Komti' || dataStorage.role == 'Mahasiswa Biasa') {
             'Authorization': 'Bearer ' + localStorage.getItem('barierToken')
         }
     }).then(response => {
-        loadingData.value = false;
+        // loadingData.value = false;
         progres.value = 25;
         totalRuanganTerpakai.value = response.data.data;
         progres.value = 50;
@@ -73,7 +73,7 @@ if (dataStorage.role == 'Komti' || dataStorage.role == 'Mahasiswa Biasa') {
         progres.value = 75;
         totalSemuaRuangan.value = response.data.data;
         progres.value = 100;
-        loadingData.value = true;
+        // loadingData.value = true;
     }).catch(error => {
         console.error(error);
         localStorage.removeItem('barierToken');
